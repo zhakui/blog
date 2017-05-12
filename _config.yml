@@ -1,13 +1,13 @@
-# Hexo Configuration
+#Hexo Configuration
 ## Docs: https://hexo.io/docs/configuration.html
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: ZhangKui/Blog 
 subtitle:
 description:
-author: John Doe
-language:
+author: zhkui
+language: zh-Hans
 timezone:
 
 # URL
