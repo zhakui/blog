@@ -1,6 +1,6 @@
 ---
 title: Redis的数据结构（一）
-date: 2017-05-15 15:04:26
+date: 2013-05-15 15:04:26
 categories:
   server technology
 tags: 
@@ -20,23 +20,24 @@ tags:
 String 数据结构是简单的 key-value 类型，value 不仅可以是 String，也可以是数字（当数字类型用 Long 可以表示的时候encoding 就是整型，其他都存储在 sdshdr 当做字符串）。使用 Strings 类型，可以完全实现目前 Memcached 的功能，并且效率更高。还可以享受 Redis 的定时持久化（可以选择 RDB 模式或者 AOF 模式），操作日志及 Replication 等功能。
 
 ## #SET、GET操作
-	$ redis-cli set mykey "my binary safe value"
-	OK
-	$ redis-cli get mykey
-	my binary safe value
-
+```sh
+$ redis-cli set mykey "my binary safe value"
+OK
+$ redis-cli get mykey
+my binary safe value
+```
 > GET和SET用来获取和设置字符串的值，只可以是任何类型的字符串，甚至你都可以在一个键下保存一副jpeg图片。但值的长度不能超过1GB。
 
 ## #INCR操作
-
-	$ redis-cli set count 100
-	OK $ redis-cli incr count
-	(integer) 101
-	$ redis-cli incr count
-	(integer) 102
-	$ redis-cli incrby count 10
-	(integer) 112
-	
+```sh
+$ redis-cli set count 100
+OK $ redis-cli incr count
+(integer) 101
+$ redis-cli incr count
+(integer) 102
+$ redis-cli incrby count 10
+(integer) 112
+```
 INCR 命令将字符串值解析成整型，将其加一，最后将结果保存为新的字符串值，类似的命令有INCRBY, DECR and DECRBY。实际上他们在内部就是同一个命令，只是看上去有点儿不同。对字符串，另一个的令人感兴趣的操作是GETSET命令，行如其名：他为key设置新值并且返回原值。这有什么用处呢？例如：你的系统每当有新用户访问时就用INCR命令操作一个Redis key。你希望每小时对这个信息收集一次。你就可以GETSET这个key并给其赋值0并读取原值。除了提供与 Memcached 一样的 get、set、incr、decr 等操作外，Redis 还提供了下面一些操作：
 
 1. LEN niushuai：O(1)获取字符串长度

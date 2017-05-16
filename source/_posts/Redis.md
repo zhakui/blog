@@ -1,6 +1,6 @@
 ---
 title: Rides介绍和安装
-date: 2017-05-12 17:32:40
+date: 2013-05-12 17:32:40
 categories:
   server technology
 tags: 
@@ -30,36 +30,36 @@ Redis从它的许多竞争继承来的三个主要特点：
 ## Redis安装
 
 ### 1.安装必要包
-
-	yum install gcc
-
+```sh
+yum install gcc
+```
 
 ### 2.下载
-
-	wget http://download.redis.io/releases/redis-3.0.0.tar.gz  
-	tar zxvf redis-3.0.0.tar.gz  
-	cd redis-3.0.0  
-	\#如果不加参数,linux下会报错  
-	make MALLOC=libc
-
+```sh
+wget http://download.redis.io/releases/redis-3.0.0.tar.gz  
+tar zxvf redis-3.0.0.tar.gz  
+cd redis-3.0.0  
+\#如果不加参数,linux下会报错  
+make MALLOC=libc
+```
 
 ### 3.启动
+```sh
+\#启动redis  
+src/redis-server &  
 
-	\#启动redis  
-	src/redis-server &  
-
-	\#关闭redis  
-	src/redis-cli shutdown</span>
-
+\#关闭redis  
+src/redis-cli shutdown</span>
+```
 
 ### 4.测试  
-
-	$ src/redis-cli  
-	127.0.0.1:6379> set foo bar  
-	OK  
-	127.0.0.1:6379> get foo  
-	"bar"
-  
+```sh
+$ src/redis-cli  
+127.0.0.1:6379> set foo bar  
+OK  
+127.0.0.1:6379> get foo  
+"bar"
+```
   
 ### 5.redis中比较重要的工具  
 * redis-server： Redis 服务器程序
