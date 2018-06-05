@@ -1,0 +1,769 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Docker,Technology," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="ps 命令 ps命令用于输出容器列表docker ps &amp;lt;选项&amp;gt;  -a、–all=false 列出所有容器。不带 -a 只输出在运行的容器–before=”” 列出特定容器创建前的容器，包含停止的容器。-f、–filter=[] 设置输出过滤。如 “exited=0”-l、–latest=false 列出最后创建的容器，包含停止的容器-q、–quiet=false 只输出容器的id">
+<meta name="keywords" content="Docker,Technology">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker常用命令(二)">
+<meta property="og:url" content="http://zhkui.com/2017/06/11/Docker常用命令 （二）/index.html">
+<meta property="og:site_name" content="ZhangKui&#x2F;Blog">
+<meta property="og:description" content="ps 命令 ps命令用于输出容器列表docker ps &amp;lt;选项&amp;gt;  -a、–all=false 列出所有容器。不带 -a 只输出在运行的容器–before=”” 列出特定容器创建前的容器，包含停止的容器。-f、–filter=[] 设置输出过滤。如 “exited=0”-l、–latest=false 列出最后创建的容器，包含停止的容器-q、–quiet=false 只输出容器的id">
+<meta property="og:updated_time" content="2017-09-08T10:19:57.107Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker常用命令(二)">
+<meta name="twitter:description" content="ps 命令 ps命令用于输出容器列表docker ps &amp;lt;选项&amp;gt;  -a、–all=false 列出所有容器。不带 -a 只输出在运行的容器–before=”” 列出特定容器创建前的容器，包含停止的容器。-f、–filter=[] 设置输出过滤。如 “exited=0”-l、–latest=false 列出最后创建的容器，包含停止的容器-q、–quiet=false 只输出容器的id">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://zhkui.com/2017/06/11/Docker常用命令 （二）/"/>
+
+
+
+
+
+  <title>Docker常用命令(二) | ZhangKui/Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ZhangKui/Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://zhkui.com/2017/06/11/Docker常用命令 （二）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zhkui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZhangKui/Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Docker常用命令(二)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-11T17:28:43+08:00">
+                2017-06-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Server/" itemprop="url" rel="index">
+                    <span itemprop="name">Server</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="ps-命令"><a href="#ps-命令" class="headerlink" title="ps 命令"></a>ps 命令</h1><blockquote>
+<p>ps命令用于输出容器列表<br>docker ps &lt;选项&gt;</p>
+</blockquote>
+<p>-a、–all=false 列出所有容器。不带 -a 只输出在运行的容器<br>–before=”” 列出特定容器创建前的容器，包含停止的容器。<br>-f、–filter=[] 设置输出过滤。如 “exited=0”<br>-l、–latest=false 列出最后创建的容器，包含停止的容器<br>-q、–quiet=false 只输出容器的id</p>
+<h1 id="push-命令"><a href="#push-命令" class="headerlink" title="push 命令"></a>push 命令</h1><blockquote>
+<p>push命令用于将镜像推送到Docker注册服务器<br>docker push &lt;注册名&gt;/&lt;镜像名&gt;:&lt;标签&gt;</p>
+</blockquote>
+<p>注册名中既可以设置Docker Hub 的用户名，也可以设置注册地址<br>若不设置标签，则推送所有标签的镜像<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker pull user/hello:latest</div></pre></td></tr></table></figure></p>
+<p>如下推送到个人仓库<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ docker pull 192.168.0.33:6666/hello:latest</div><div class="line">$ docker pull yourset.com:6666/hello:latest</div></pre></td></tr></table></figure></p>
+<h1 id="restart-命令"><a href="#restart-命令" class="headerlink" title="restart 命令"></a>restart 命令</h1><blockquote>
+<p>restart命令用户重启容器<br>docker restart &lt;选项&gt;&lt;容器名称，id&gt;</p>
+</blockquote>
+<p>-t、time=10 设置从容器停止到重启的等待时间，单位为秒<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker restart hello</div></pre></td></tr></table></figure></p>
+<h1 id="rm-命令"><a href="#rm-命令" class="headerlink" title="rm 命令"></a>rm 命令</h1><blockquote>
+<p>rm 命令用于删除容器<br>docker rm &lt;选项&gt;&lt;容器名称，id&gt;</p>
+</blockquote>
+<p>-f、–force=false 强制停止容器后删除（使用SIGKILL信号）<br>-l、–link=false 在docker run 命令中使用–link 选项，只删除连接，不删除容器。<br>-v、–volumes=false 删除连接到容器的数据卷<br>若要一次删除所有容器，可在docker ps：命令中使用 -a -q 选项获取容器id只有传给docker rm 命令<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ docker rm `docker ps -aq`</div><div class="line">$ docker rm $(docker ps -aq)</div></pre></td></tr></table></figure></p>
+<h1 id="rmi-命令"><a href="#rmi-命令" class="headerlink" title="rmi 命令"></a>rmi 命令</h1><blockquote>
+<p>rmi命令用于删除镜像。若不指定标签，则删除latest标签<br>docker rim &lt;注册名称&gt;/&lt;镜像名称，id&gt;:&lt;标签&gt;</p>
+</blockquote>
+<p>-f、–force=false 强制删除镜像<br>–no-prune=false 不删除不带标签的父级镜像<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ docker rmi hello</div><div class="line">$ docker rmi user/hello:latest</div><div class="line">$ docker rmi 192.168.0.33:6666/hello:latest  <span class="comment">#远程仓库镜像</span></div><div class="line">$ docker pull yourset.com:6666/hello:latest  <span class="comment">#远程仓库镜像</span></div></pre></td></tr></table></figure></p>
+<p>删除所有镜像与删除容器类似<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker rmi `docker images -aq`</div></pre></td></tr></table></figure></p>
+<h1 id="run-命令"><a href="#run-命令" class="headerlink" title="run 命令"></a>run 命令</h1><blockquote>
+<p>run命令用于指定镜像创建容器<br>docker run &lt;选项&gt;&lt;镜像名称，id&gt;&lt;命令&gt;&lt;参数&gt;</p>
+</blockquote>
+<p>docker run 命令 与 docker create 基本类似 唯一的不同是 run命令在创建容器后会启动容器，所以参数基本类似，只是多了关于启动后的设置，一下是多出来的命令：<br>-d、–detach Detach模式，一般为守护进程模式，容器以后台方式运行<br>–rm=false 若容器内的进程终止，则自动删除容器，此选项不能与-d选项一起使用<br>–sig-proxy=true 将所有信号传递给进程（非TTY模式时也一样），但不传递SIGCHLD、SIGKILL、SIGSTOP信号</p>
+<h1 id="save-命令"><a href="#save-命令" class="headerlink" title="save 命令"></a>save 命令</h1><blockquote>
+<p>save命令用于将镜像保存为tar包文件<br>docker save &lt;选项&gt;&lt;镜像名称&gt;:&lt;标签&gt;</p>
+</blockquote>
+<p>-o、–output=”” 设置保存的文件名<br>若不设置-o选项，tar文件会输出到标准输出，所以必须设置重定向。如果仅指定镜像名称而未指定标签，则将所有标签保存到一个tar文件。</p>
+<h1 id="search-命令"><a href="#search-命令" class="headerlink" title="search 命令"></a>search 命令</h1><blockquote>
+<p>search命令用与在docker hub 中搜索镜像<br>docker search &lt;选项&gt;&lt;搜索词&gt;</p>
+</blockquote>
+<p>–automated=false 只显示由docker hub 的automated build 创建的镜像<br>–no-trunc=false 显示所有因因为内容过长而省略的部分<br>-s、–stars=0 显示滴啊有特定星级以上的镜像</p>
+<h1 id="start-命令"><a href="#start-命令" class="headerlink" title="start 命令"></a>start 命令</h1><blockquote>
+<p>start命令用于启动容器<br>docker start &lt;选项&gt;&lt;容器名称，id&gt;</p>
+</blockquote>
+<p>-a、–attrch=false 将标准输入、标准输出、标准错误连接到容器，传递所有信号<br>-i、–interactive=false 激活标准输入</p>
+<h1 id="stop-命令"><a href="#stop-命令" class="headerlink" title="stop 命令"></a>stop 命令</h1><blockquote>
+<p>stop命令用于终止容器<br>docker stop &lt;选项&gt;&lt;容器名称，id&gt;</p>
+</blockquote>
+<p>-t、–time=10 设置终止容器前的等待时间，单位为秒</p>
+<h1 id="tag-命令"><a href="#tag-命令" class="headerlink" title="tag 命令"></a>tag 命令</h1><blockquote>
+<p>tag命令用于设置镜标签<br>docker tag &lt;选项&gt;&lt;镜像名称&gt;:&lt;标签&gt;&lt;注册地址，用户名&gt;/&lt;镜像名称&gt;:&lt;标签&gt;</p>
+</blockquote>
+<p>-f、–force=false 即使已拥有标签也强制设置<br>如将远程仓库设置标签<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ docker tag hello:latest user/hello:0.1  <span class="comment">#设置docker hub上的</span></div><div class="line">$ docker tag hello:latest youset:6666/hello:0.1  <span class="comment">#私人仓库</span></div></pre></td></tr></table></figure></p>
+<h1 id="top-命令"><a href="#top-命令" class="headerlink" title="top 命令"></a>top 命令</h1><blockquote>
+<p>top命令用于显示容器中正在运行的进程信息<br>docker top &lt;容器名称，id&gt;<ps选项></ps选项></p>
+</blockquote>
+<p>在<ps选项>中设置 Linux ps 命令的选项<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker top hello aux</div></pre></td></tr></table></figure></ps选项></p>
+<h1 id="unpause-命令"><a href="#unpause-命令" class="headerlink" title="unpause 命令"></a>unpause 命令</h1><blockquote>
+<p>unpause命令用于重启 pause 命令暂停的容器<br>docker unpause &lt;容器名称，id&gt;</p>
+</blockquote>
+<h1 id="version-命令"><a href="#version-命令" class="headerlink" title="version 命令"></a>version 命令</h1><blockquote>
+<p>version命令用于输出docker的版本信息</p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker version</div></pre></td></tr></table></figure>
+<h1 id="wait-命令"><a href="#wait-命令" class="headerlink" title="wait 命令"></a>wait 命令</h1><blockquote>
+<p>wait 命令等待容器终止，然后输出 Exit Code<br>docker wait &lt;容器名称，id&gt;</p>
+</blockquote>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>单一的容器一般不能满足业务需要，需要一个编排的工具。Docker Compose和Docker Swarm 正是负责快速在集群中部署分布式应用。漫漫长路，学的还有好多，工作虽不是负责这方面的，我想做的只是将自己的想法运行在代码是而已。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Docker/" rel="tag"># Docker</a>
+          
+            <a href="/tags/Technology/" rel="tag"># Technology</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/20/SpringCloud微服务框架搭建/" rel="next" title="SpringCloud微服务框架搭建">
+                <i class="fa fa-chevron-left"></i> SpringCloud微服务框架搭建
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/11/Docker常用命令/" rel="prev" title="Docker常用命令">
+                Docker常用命令 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="zhkui" />
+          <p class="site-author-name" itemprop="name">zhkui</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ps-命令"><span class="nav-number">1.</span> <span class="nav-text">ps 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#push-命令"><span class="nav-number">2.</span> <span class="nav-text">push 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#restart-命令"><span class="nav-number">3.</span> <span class="nav-text">restart 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rm-命令"><span class="nav-number">4.</span> <span class="nav-text">rm 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rmi-命令"><span class="nav-number">5.</span> <span class="nav-text">rmi 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#run-命令"><span class="nav-number">6.</span> <span class="nav-text">run 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#save-命令"><span class="nav-number">7.</span> <span class="nav-text">save 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#search-命令"><span class="nav-number">8.</span> <span class="nav-text">search 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#start-命令"><span class="nav-number">9.</span> <span class="nav-text">start 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#stop-命令"><span class="nav-number">10.</span> <span class="nav-text">stop 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tag-命令"><span class="nav-number">11.</span> <span class="nav-text">tag 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#top-命令"><span class="nav-number">12.</span> <span class="nav-text">top 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#unpause-命令"><span class="nav-number">13.</span> <span class="nav-text">unpause 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#version-命令"><span class="nav-number">14.</span> <span class="nav-text">version 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#wait-命令"><span class="nav-number">15.</span> <span class="nav-text">wait 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后记"><span class="nav-number">16.</span> <span class="nav-text">后记</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-zhakui"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhkui</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

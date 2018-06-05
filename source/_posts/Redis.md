@@ -2,9 +2,11 @@
 title: Rides介绍和安装
 date: 2013-05-12 17:32:40
 categories:
-  server technology
+  Server 
 tags: 
-  Rides
+  - Rides
+  - Technology
+  - Server
 ---
 
 ## Redis介绍

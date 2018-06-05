@@ -2,9 +2,12 @@
 title: Redis的数据结构（二）
 date: 2013-05-16 09:58:37
 categories:
-  server technology
+  Server 
 tags: 
-  Rides
+  - Rides
+  - Technology
+  - Server
+---
 ---
 在上文[Redis的数据结构(一)](http://zhkui.com/2017/05/15/Redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/)中，我们了解了Redis的两种数据类型(String和Hash)，这篇文章我们将继续了解其他几种数据类型。在Redis中总共有5中数据类型：
 - String——字符串
@@ -13,7 +16,7 @@ tags:
 - Set——集合
 - Sorted Set——有序集合
 
-# 1. String--列表
+# 1. List——列表
 
 一般意义上讲，列表就是有序元素的序列：10,20,1,2,3就是一个列表。但用数组实现的List和用Linked List实现的List，在属性方面大不相同。
 Redis lists基于Linked Lists实现。这意味着即使在一个list中有数百万个元素，在头部或尾部添加一个元素的操作，其时间复杂度也是常数级别的。用LPUSH命令在十个元素的list头部添加新元素，和在千万元素list头部添加新元素的速度相同。那么，坏消息是什么？在数组实现的list中利用索引访问元素的速度极快，而同样的操作在linked list实现的list上没有那么快。

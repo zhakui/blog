@@ -2,9 +2,11 @@
 title: Redis的数据结构（一）
 date: 2013-05-15 15:04:26
 categories:
-  server technology
+  Server 
 tags: 
-  Rides
+  - Rides
+  - Technology
+  - Server
 ---
 
   Redis是一种面向“键/值”对类型数据的分布式NoSQL数据库系统，特点是高性能，持久存储，适应高并发的应用场景。它起步较晚，发展迅速，目前已被许多大型机构采用，比如Github、Twitter、Weibo等。Redis并不是简单的key-value存储，实际上他是一个数据结构服务器，支持不同类型的值。也就是说，你不必仅仅把字符串当作键所指向的值。在Redis中一共有5种数据结构，那每种数据结构的使用场景都是什么呢？

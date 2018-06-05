@@ -1,0 +1,806 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Technology,Hadoop,Server," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="Hadoop是什么Hadoop是根据Google发表的两篇论文（论述Google文件系统（GFS）和MapReduce框架）开发出的开源框架。Hadoop是一种开源的适合大数据的分布式存储和处理的平台。作为一种大规模分布式数据处理平台。 Hadoop能做什么 搜索引擎：这也正是Doug Cutting设计Hadoop的初衷，为了针对大规模的网页快速建立索引； 大数据存储：利用Hadoop的分布式存">
+<meta name="keywords" content="Technology,Hadoop,Server">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop基础知识整理">
+<meta property="og:url" content="http://zhkui.com/2017/08/11/Hadoop基础知识整理/index.html">
+<meta property="og:site_name" content="ZhangKui&#x2F;Blog">
+<meta property="og:description" content="Hadoop是什么Hadoop是根据Google发表的两篇论文（论述Google文件系统（GFS）和MapReduce框架）开发出的开源框架。Hadoop是一种开源的适合大数据的分布式存储和处理的平台。作为一种大规模分布式数据处理平台。 Hadoop能做什么 搜索引擎：这也正是Doug Cutting设计Hadoop的初衷，为了针对大规模的网页快速建立索引； 大数据存储：利用Hadoop的分布式存">
+<meta property="og:updated_time" content="2017-09-08T10:16:30.923Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hadoop基础知识整理">
+<meta name="twitter:description" content="Hadoop是什么Hadoop是根据Google发表的两篇论文（论述Google文件系统（GFS）和MapReduce框架）开发出的开源框架。Hadoop是一种开源的适合大数据的分布式存储和处理的平台。作为一种大规模分布式数据处理平台。 Hadoop能做什么 搜索引擎：这也正是Doug Cutting设计Hadoop的初衷，为了针对大规模的网页快速建立索引； 大数据存储：利用Hadoop的分布式存">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://zhkui.com/2017/08/11/Hadoop基础知识整理/"/>
+
+
+
+
+
+  <title>Hadoop基础知识整理 | ZhangKui/Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ZhangKui/Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://zhkui.com/2017/08/11/Hadoop基础知识整理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zhkui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZhangKui/Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hadoop基础知识整理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-11T17:28:43+08:00">
+                2017-08-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/BigData/" itemprop="url" rel="index">
+                    <span itemprop="name">BigData</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Hadoop是什么"><a href="#Hadoop是什么" class="headerlink" title="Hadoop是什么"></a>Hadoop是什么</h1><p>Hadoop是根据Google发表的两篇论文（论述Google文件系统（GFS）和MapReduce框架）开发出的开源框架。<br>Hadoop是一种开源的适合大数据的分布式存储和处理的平台。作为一种大规模分布式数据处理平台。</p>
+<h1 id="Hadoop能做什么"><a href="#Hadoop能做什么" class="headerlink" title="Hadoop能做什么"></a>Hadoop能做什么</h1><ol>
+<li>搜索引擎：这也正是Doug Cutting设计Hadoop的初衷，为了针对大规模的网页快速建立索引；</li>
+<li>大数据存储：利用Hadoop的分布式存储能力，例如数据备份、数据仓库等；</li>
+<li>大数据处理：利用Hadoop的分布式处理能力，例如数据挖掘、数据分析等；</li>
+<li>科学研究：Hadoop是一种分布式的开源框架，对于分布式系统有很大程度地参考价值。</li>
+</ol>
+<h1 id="Hadoop三种模式"><a href="#Hadoop三种模式" class="headerlink" title="Hadoop三种模式"></a>Hadoop三种模式</h1><p>Hadoop有三种不同的模式操作，分别为单机模式、伪分布模式和全分布模式。Hadoop官网都详细介绍了三种模式的配置方式。</p>
+<h1 id="Hadoop分布式文件系统HDFS"><a href="#Hadoop分布式文件系统HDFS" class="headerlink" title="Hadoop分布式文件系统HDFS"></a>Hadoop分布式文件系统HDFS</h1><p>Hadoop分布式文件系统（Hadoop Distributed File System，简称HDFS）是Hadoop的核心模块之一，它主要解决Hadoop的大数据存储问题，其思想来源与Google的文件系统GFS。HDFS的主要特点：</p>
+<ol>
+<li>保存多个副本，且提供容错机制，副本丢失或宕机自动恢复。默认存3份。</li>
+<li>运行在廉价的机器上,可以用大规模的PC机搭建出高可用、高性能的服务集群</li>
+<li>适合大数据的处理。HDFS默认会将文件分割成block，128M为1个block。然后将block按键值对存储在HDFS上，并将键值对的映射存到内存中。Hadoop更适合处理大文件，如果小文件太多，那内存的负担会很重。</li>
+</ol>
+<h2 id="HDFS中的四个重要对象："><a href="#HDFS中的四个重要对象：" class="headerlink" title="HDFS中的四个重要对象："></a>HDFS中的四个重要对象：</h2><h3 id="Namenode"><a href="#Namenode" class="headerlink" title="[Namenode]"></a>[Namenode]</h3><ol>
+<li>管理文件系统的命名空间。</li>
+<li>记录每个文件数据块在各个Datanode上的位置和副本信息。</li>
+<li>协调客户端对文件的访问。</li>
+<li>记录命名空间内的改动或者空间本省属性的改动。</li>
+<li>校验块的完整性，副本数量</li>
+<li>Namenode 使用事务日志记录HDFS元数据的变化。使用映像文件存储文件系统的命名空间，包括文件映射，文件属性等。<br>Namenode是HDFS里面的管理者，发挥者管理、协调、操控的作用。</li>
+</ol>
+<h3 id="Datanode"><a href="#Datanode" class="headerlink" title="[Datanode]"></a>[Datanode]</h3><ol>
+<li>Datnode会发送心跳和块报告给namenode，如果namenode长时间没收到心跳，会判断此节点丢失，并不会再给这个分配任务</li>
+<li>负责所在物理节点的存储管理。</li>
+<li>一次写入，多次读取（不能修改）。</li>
+<li>文件由数据库组成，一般情况下，数据块的大小为128MB。</li>
+<li>数据尽量散步到各个节点<br>Datanode是HDFS的工作者，发挥按着Namenode的命令干活，并且把干活的进展和问题反馈到Namenode的作用。</li>
+</ol>
+<h4 id="客户端如何访问HDFS中一个文件呢"><a href="#客户端如何访问HDFS中一个文件呢" class="headerlink" title="客户端如何访问HDFS中一个文件呢"></a>客户端如何访问HDFS中一个文件呢</h4><ol>
+<li>首先从Namenode获得组成这个文件的数据块位置列表。</li>
+<li>接下来根据位置列表知道存储数据块的Datanode。</li>
+<li>最后访问Datanode获取数据。<br>Namenode并不参与数据实际传输。</li>
+</ol>
+<h3 id="SecondaryNameNode"><a href="#SecondaryNameNode" class="headerlink" title="[SecondaryNameNode]"></a>[SecondaryNameNode]</h3><ol>
+<li>定期合并namenode的编辑日志到fsimage</li>
+<li>一旦它有了新的fsimage文件，它将其拷贝回NameNode中。</li>
+<li>NameNode在下次重启时会使用这个新的fsimage文件，从而减少重启的时间<br>SecondaryNameNode辅助NameNode工作，好比是namenode的秘书，不参与实际的管理工作</li>
+</ol>
+<h4 id="HDFS是如何保证其可靠性呢"><a href="#HDFS是如何保证其可靠性呢" class="headerlink" title="HDFS是如何保证其可靠性呢"></a>HDFS是如何保证其可靠性呢</h4><p>数据存储系统，数据存储的可靠性至关重要。</p>
+<ol>
+<li>冗余副本策略，即所有数据都有副本，副本的数目可以在hdfs-site.xml中设置相应的复制因子。</li>
+<li>机架策略，即HDFS的“机架感知”，一般在本机架存放一个副本，在其它机架再存放别的副本，这样可以防止机架失效时丢失数据，也可以提供带宽利用率。</li>
+<li>心跳机制，即Namenode周期性从Datanode接受心跳信号和快报告，没有按时发送心跳的Datanode会被标记为宕机，不会再给任何I/O请求，若是Datanode失效造成副本数量下降，并且低于预先设置的阈值，Namenode会检测出这些数据块，并在合适的时机进行重新复制。</li>
+<li>安全模式，Namenode启动时会先经过一个“安全模式”阶段。</li>
+<li>校验和，客户端获取数据通过检查校验和，发现数据块是否损坏，从而确定是否要读取副本。</li>
+<li>回收站，删除文件，会先到回收站/trash，其里面文件可以快速回复。</li>
+<li>元数据保护，映像文件和事务日志是Namenode的核心数据，可以配置为拥有多个副本。</li>
+<li>快照，支持存储某个时间点的映像，需要时可以使数据重返这个时间点的状态。</li>
+</ol>
+<p>HDFS也是按照Master和Slave的结构。分NameNode、SecondaryNameNode、DataNode这几个角色。<br>NameNode：是Master节点，是大领导。管理数据块映射；处理客户端的读写请求；配置副本策略；管理HDFS的名称空间；<br>SecondaryNameNode：是一个小弟，分担大哥namenode的工作量；是NameNode的冷备份；合并fsimage和fsedits然后再发给namenode。<br>DataNode：Slave节点，负责存储client发来的数据块block；执行数据块的读写操作。<br>fsimage:元数据镜像文件（文件系统的目录树。）<br>edits：元数据的操作日志（针对文件系统做的修改操作记录）<br>namenode内存中存储的是=fsimage+edits。<br>SecondaryNameNode负责定时默认1小时，从namenode上，获取fsimage和edits来进行合并，然后再发送给namenode。减少namenode的工作量。</p>
+<h1 id="HDFS文件系统的优点"><a href="#HDFS文件系统的优点" class="headerlink" title="HDFS文件系统的优点"></a>HDFS文件系统的优点</h1><ol>
+<li>处理超大文件，超大文件通常是指百MB、设置数百TB大小的文件。目前在实际应用中，HDFS已经能用来存储管理PB级的数据了。</li>
+<li>流式的访问数据，HDFS的设计建立在更多地响应”一次写入、多次读写”任务的基础上。这意味着一个数据集一旦由数据源生成，就会被复制分发到不同的存储节点中，然后响应各种各样的数据分析任务请求。在多数情况下，分析任务都会涉及数据集中的大部分数据，也就是说，对HDFS来说，请求读取整个数据集要比读取一条记录更加高效。</li>
+<li>运行于廉价的商用机器集群上，Hadoop设计对硬件需求比较低，只须运行在低廉的商用硬件集群上，而无需昂贵的高可用性机器上。廉价的商用机也就意味着大型集群中出现节点故障情况的概率非常高。这就要求设计HDFS时要充分考虑数据的可靠性，安全性及高可用性。</li>
+</ol>
+<h1 id="HDFS的缺点"><a href="#HDFS的缺点" class="headerlink" title="HDFS的缺点"></a>HDFS的缺点</h1><ol>
+<li>不适合低延迟数据访问，如果要处理一些用户要求时间比较短的低延迟应用请求，则HDFS不适合。HDFS是为了处理大型数据集分析任务的，主要是为达到高的数据吞吐量而设计的，这就可能要求以高延迟作为代价。<br>　　对于那些有低延时要求的应用程序，HBase是一个更好的选择。通过上层数据管理项目来尽可能地弥补这个不足。在性能上有了很大的提升，它的口号就是goes real time。使用缓存或多master设计可以降低client的数据请求压力，以减少延时。还有就是对HDFS系统内部的修改，这就得权衡大吞吐量与低延时了，HDFS不是万能的银弹。</li>
+<li>无法高效存储大量小文件，因为Namenode把文件系统的元数据放置在内存中，所以文件系统所能容纳的文件数目是由Namenode的内存大小来决定。一般来说，每一个文件、文件夹和Block需要占据150字节左右的空间，所以，如果你有100万个文件，每一个占据一个Block，你就至少需要300MB内存。当前来说，数百万的文件还是可行的，当扩展到数十亿时，对于当前的硬件水平来说就没法实现了。还有一个问题就是，因为Map task的数量是由splits来决定的，所以用MR处理大量的小文件时，就会产生过多的Maptask，线程管理开销将会增加作业时间。举个例子，处理10000M的文件，若每个split为1M，那就会有10000个Maptasks，会有很大的线程开销；若每个split为100M，则只有100个Maptasks，每个Maptask将会有更多的事情做，而线程的管理开销也将减小很多。</li>
+<li>不支持多用户写入及任意修改文件，在HDFS的一个文件中只有一个写入者，而且写操作只能在文件末尾完成，即只能执行追加操作。目前HDFS还不支持多个用户对同一文件的写操作，以及在文件任意位置进行修改。<blockquote>
+<p>改进策略：要想让HDFS能处理好小文件：</p>
+<ol>
+<li>利用SequenceFile、MapFile、Har等方式归档小文件，这个方法的原理就是把小文件归档起来管理，HBase就是基于此的。对于这种方法，如果想找回原来的小文件内容，那就必须得知道与归档文件的映射关系。</li>
+<li>横向扩展，一个Hadoop集群能管理的小文件有限，那就把几个Hadoop集群拖在一个虚拟服务器后面，形成一个大的Hadoop集群。google也是这么干过的。</li>
+<li>多Master设计，这个作用显而易见了。正在研发中的GFS II也要改为分布式多Master设计，还支持Master的Failover，而且Block大小改为1M，有意要调优处理小文件啊。<br>Alibaba DFS的设计，也是多Master设计，它把Metadata的映射存储和管理分开了，由多个Metadata存储节点和一个查询Master节点组成。</li>
+</ol>
+</blockquote>
+</li>
+</ol>
+<h1 id="Hadoop是资源管理系统YARN"><a href="#Hadoop是资源管理系统YARN" class="headerlink" title="Hadoop是资源管理系统YARN"></a>Hadoop是资源管理系统YARN</h1><h2 id="ResourceManager"><a href="#ResourceManager" class="headerlink" title="ResourceManager"></a>ResourceManager</h2><p>整个集群只有一个，负责集群资源的统一管理和调度</p>
+<ol>
+<li>处理客户端请求</li>
+<li>启动/监控ApplicationMaster</li>
+<li>监控NodeManager</li>
+<li>资源分配与调度</li>
+</ol>
+<h2 id="NodeManager"><a href="#NodeManager" class="headerlink" title="NodeManager"></a>NodeManager</h2><p>整个集群有多个，负责单节点资源管理和使用</p>
+<ol>
+<li>单个节点上的资源管理和任务管理</li>
+<li>处理来自ResourceManager的命令</li>
+<li>处理来自ApplicationMaster的命令</li>
+</ol>
+<h2 id="ApplicationMaster"><a href="#ApplicationMaster" class="headerlink" title="ApplicationMaster"></a>ApplicationMaster</h2><p>每个应用有一个，负责应用程序的管理</p>
+<ol>
+<li>数据切分</li>
+<li>为应用程序申请资源，并进一步分配给内部任务</li>
+<li>任务监控与容错</li>
+</ol>
+<h2 id="Container"><a href="#Container" class="headerlink" title="Container"></a>Container</h2><p>对任务运行环境的抽象，描述一系列信息</p>
+<ol>
+<li>任务运行资源（节点、内存、CPU）</li>
+<li>任务启动命令</li>
+<li>任务运行环境</li>
+</ol>
+<h1 id="Hadoop数据分析框架"><a href="#Hadoop数据分析框架" class="headerlink" title="Hadoop数据分析框架"></a>Hadoop数据分析框架</h1><p>MapReduce是Hadoop的大数据分布式处理系统，Hadoop核心之MapReduce是一个软件框架，基于该框架能够容易地编写应用程序，这些应用程序能够运行在由上千个商用机器组成的大集群上，并以一种可靠的，具有容错能力的方式并行地处理上TB级别的海量数据集。<br>MapReduce主要是用于解决Hadoop大数据处理的。所谓大数据处理，即以对大数据加工、挖掘和优化等各种处理。<br>MapReduce擅长处理大数据，其主要思想是“分而治之”。Mapper负责“分”，即把复杂的任务分解为若干个“简单的任务”来处理。“简单的任务”包含三层含义：一是数据或计算的规模相对原任务要大大缩小；二是就近计算原则，即任务会分配到存放着所需数据的节点上进行计算；三是这些小任务可以并行计算，彼此间几乎没有依赖关系。Reducer负责对map阶段的结果进行汇总。可以设置多个Reducer（通过在mapred-site.xml配置文件里设置参数mapred.reduce.tasks的值，缺省值为1）。<br>MapReduce的工作机制如图所示：</p>
+<p>MapReduce的整个工作过程如上图所示，它包含如下4个独立的实体：<br>　　1. 客户端，用来提交MapReduce作业。<br>　　2. jobtracker，用来协调作业的运行。<br>　　3. tasktracker，用来处理作业划分后的任务。<br>　　4. HDFS，用来在其它实体间共享作业文件。<br>MapReduce整个工作过程有序地包含如下工作环节：<br>　　1. 作业的提交<br>　　2. 作业的初始化<br>　　3. 任务的分配<br>　　4. 任务的执行<br>　　5. 进程和状态的更新<br>　　6. 作业的完成 </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Technology/" rel="tag"># Technology</a>
+          
+            <a href="/tags/Hadoop/" rel="tag"># Hadoop</a>
+          
+            <a href="/tags/Server/" rel="tag"># Server</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/11/Docker安装/" rel="next" title="Docker安装">
+                <i class="fa fa-chevron-left"></i> Docker安装
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/11/Hadoop HA配置/" rel="prev" title="Hadoop HA配置">
+                Hadoop HA配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="zhkui" />
+          <p class="site-author-name" itemprop="name">zhkui</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Hadoop是什么"><span class="nav-number">1.</span> <span class="nav-text">Hadoop是什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hadoop能做什么"><span class="nav-number">2.</span> <span class="nav-text">Hadoop能做什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hadoop三种模式"><span class="nav-number">3.</span> <span class="nav-text">Hadoop三种模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hadoop分布式文件系统HDFS"><span class="nav-number">4.</span> <span class="nav-text">Hadoop分布式文件系统HDFS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HDFS中的四个重要对象："><span class="nav-number">4.1.</span> <span class="nav-text">HDFS中的四个重要对象：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Namenode"><span class="nav-number">4.1.1.</span> <span class="nav-text">[Namenode]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Datanode"><span class="nav-number">4.1.2.</span> <span class="nav-text">[Datanode]</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端如何访问HDFS中一个文件呢"><span class="nav-number">4.1.2.1.</span> <span class="nav-text">客户端如何访问HDFS中一个文件呢</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SecondaryNameNode"><span class="nav-number">4.1.3.</span> <span class="nav-text">[SecondaryNameNode]</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HDFS是如何保证其可靠性呢"><span class="nav-number">4.1.3.1.</span> <span class="nav-text">HDFS是如何保证其可靠性呢</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HDFS文件系统的优点"><span class="nav-number">5.</span> <span class="nav-text">HDFS文件系统的优点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HDFS的缺点"><span class="nav-number">6.</span> <span class="nav-text">HDFS的缺点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hadoop是资源管理系统YARN"><span class="nav-number">7.</span> <span class="nav-text">Hadoop是资源管理系统YARN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ResourceManager"><span class="nav-number">7.1.</span> <span class="nav-text">ResourceManager</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NodeManager"><span class="nav-number">7.2.</span> <span class="nav-text">NodeManager</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ApplicationMaster"><span class="nav-number">7.3.</span> <span class="nav-text">ApplicationMaster</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Container"><span class="nav-number">7.4.</span> <span class="nav-text">Container</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hadoop数据分析框架"><span class="nav-number">8.</span> <span class="nav-text">Hadoop数据分析框架</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-zhakui"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhkui</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

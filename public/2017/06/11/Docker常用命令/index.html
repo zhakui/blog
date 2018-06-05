@@ -1,0 +1,805 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Docker,Technology," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言从技术老大那里听说了docker，闲下来之后就简单了解了一下，发现真的是一个好用的不得了的工具。遂周末去图书馆找了下相关资料，学习下姿势。说不定哪天用上了呢😝。在看资料的过程中，发现有不少命令都不知道什么意思，所以干脆做了一个整理，以备以后查阅。ps：在docker命令后输入 -h 参数，可查看详细命令。我也是参照某本书上的命令整理的，也不是很全，待以后遇到了继续补充。  文中 =[] 表示">
+<meta name="keywords" content="Docker,Technology">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker常用命令">
+<meta property="og:url" content="http://zhkui.com/2017/06/11/Docker常用命令/index.html">
+<meta property="og:site_name" content="ZhangKui&#x2F;Blog">
+<meta property="og:description" content="前言从技术老大那里听说了docker，闲下来之后就简单了解了一下，发现真的是一个好用的不得了的工具。遂周末去图书馆找了下相关资料，学习下姿势。说不定哪天用上了呢😝。在看资料的过程中，发现有不少命令都不知道什么意思，所以干脆做了一个整理，以备以后查阅。ps：在docker命令后输入 -h 参数，可查看详细命令。我也是参照某本书上的命令整理的，也不是很全，待以后遇到了继续补充。  文中 =[] 表示">
+<meta property="og:updated_time" content="2017-09-08T10:19:34.427Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker常用命令">
+<meta name="twitter:description" content="前言从技术老大那里听说了docker，闲下来之后就简单了解了一下，发现真的是一个好用的不得了的工具。遂周末去图书馆找了下相关资料，学习下姿势。说不定哪天用上了呢😝。在看资料的过程中，发现有不少命令都不知道什么意思，所以干脆做了一个整理，以备以后查阅。ps：在docker命令后输入 -h 参数，可查看详细命令。我也是参照某本书上的命令整理的，也不是很全，待以后遇到了继续补充。  文中 =[] 表示">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://zhkui.com/2017/06/11/Docker常用命令/"/>
+
+
+
+
+
+  <title>Docker常用命令 | ZhangKui/Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ZhangKui/Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://zhkui.com/2017/06/11/Docker常用命令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zhkui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZhangKui/Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Docker常用命令</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-11T17:28:43+08:00">
+                2017-06-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Server/" itemprop="url" rel="index">
+                    <span itemprop="name">Server</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>从技术老大那里听说了docker，闲下来之后就简单了解了一下，发现真的是一个好用的不得了的工具。遂周末去图书馆找了下相关资料，学习下姿势。说不定哪天用上了呢😝。在看资料的过程中，发现有不少命令都不知道什么意思，所以干脆做了一个整理，以备以后查阅。ps：在docker命令后输入 -h 参数，可查看详细命令。我也是参照某本书上的命令整理的，也不是很全，待以后遇到了继续补充。</p>
+<blockquote>
+<p>文中 =[] 表示设置选项时可以设置不同的值，并且可以多次使用 如： -p 8000:80 -p 8080:8080<br>命令后面的 =false 表示默认值为 false =”” 表示默认值为空<br>若用户不属于docker组，可能需要sudo执行</p>
+</blockquote>
+<h1 id="docker基础命令"><a href="#docker基础命令" class="headerlink" title="docker基础命令"></a>docker基础命令</h1><blockquote>
+<p>docker &lt;选项&gt;&lt;命令&gt;&lt;参数&gt;</p>
+</blockquote>
+<p><code>--api-enable-cors=false</code> 使用API时，启用CORS（cross-origin resource sharing）<br><code>-b 、--bridge=&quot;&quot;</code> 使用事先创建的网桥接口。若设置为none，则不在容器内使用网络<br><code>--bip=&quot;&quot;</code> 使用CIDR标记法设置docker 的IP带宽。该选项不能与-b选项同时使用<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">如：`-bip=<span class="string">"192.168.0.0/24"</span>`</div></pre></td></tr></table></figure></p>
+<p><code>-D 、--debug</code> 启用调试模式<br><code>-d 、--deamon=false</code> 以守护进程模式运行<br><code>--dns</code> 设置docker要使用的DNS服务器<br><code>--dns-search=[]</code> 设置docker要使用的DNS搜索域。若设置为：example.com，则向服务器查询hello时，将首先查找hello.example.com<br><code>-e、--exec-drive=&quot;native&quot;</code> 设置docker运行驱动，可设置为Native与lxc<br><code>--fixed-cidr=&quot;&quot;</code> 固定分配IPv4地址的带宽。该IP地址必须在-b选项设置的网桥网络或–bip设置的IP网段内<br><code>-G、--group=&quot;docker&quot;</code> 以守护进程模式运行时，使用-H选项创建Unix套接字后，设置该Unix套接字所在的组。使用””空字符串表示不设置分组<br><code>-g、 --graph=&quot;/var/lib/docker&quot;</code> 设置docker使用目录的顶层路径<br>-H、–host[] 以守护进程模式运行时，设置套接字路径。ls</p>
+<p>–icc=true 开启容器间通信<br>–insecure-registry=[] 使用私有证书搭建docker注册服务器时，设置docker注册服务器域名<br>–ip=0.0.0.0 使用docker run 命令时-p选项将端口暴露在外时，设置要绑定的默认IP地址<br>–ip-forward=true 开启net.ipv4.ip_forward<br>–ip-masq=true 为网桥上的IP地址开启IP伪装（masquerading）<br>–iptables=true 开启iptables规则<br>–mtu=0 设置容器的网络最大传输单元（MTU, Maxmum transmission unit）若不设置，则使用路由器的默认MTU或者设置为1500<br>-p、–pidfile=”/var/run/docker.pid” 设置PID文件路径<br>-registry-mirror=[] 设置docker registry 的镜像地址<br>-s、–storage-driver=[] 设置储存驱动，默认为auto，也可以设置为drivcemapper<br>–selinux-enabled=false开启SELinux SELinux尚不支持BTRFS储存驱动<br>–storage-opt 设置存储驱动选项<br>–tls=false 使用TLS<br>–tlscacert=”/home/exapmleuser/.docker/ca.pem” 设置要在远程证书中使用的CA证书文件的路径<br>–tlscert=”/home/exapmleuser/.docker/cert.pem” 设置证书文件路径<br>–tlskey=”/home/exapmleuser/.docker/key.pem” 设置密匙文件路径<br>tlsverify=”false” 使用TLS远程证书，守护进程与客户端全部使用证书验证<br>-v、–version=false 打印版本信息</p>
+<h1 id="attach命令"><a href="#attach命令" class="headerlink" title="attach命令"></a>attach命令</h1><blockquote>
+<p>attach命令用于将标准输入（stdin）与标准输出（stdout）连接到正在运行的容器<br>docker attach &lt;选项&gt;&lt;容器名称, id&gt;</p>
+</blockquote>
+<p>–no-stdin=false 不连接标准输入<br>–sig-proxy=true 将所有信号传递给进程（非TTY模式时也一样）但不传送SIGCHLD、SIGKILL、SIGSTOP信号。经常使用的信号如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">SIGINT：interrupt信号，输入Ctrl + c 时发生</div><div class="line">SIGQUIT：Quit信号，输入Ctrl + \ 时发生</div><div class="line">EOF：终止attach状态，输入Ctrl + d 时发生</div></pre></td></tr></table></figure></p>
+<p>一般会先运行Bash等shell，然后使用docker attach 命令连接到容器，在运行各种命令<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">docker run -it --name hello ubuntu /bin/bash</div><div class="line">docker attach hello</div></pre></td></tr></table></figure></p>
+<h1 id="build-命令"><a href="#build-命令" class="headerlink" title="build 命令"></a>build 命令</h1><blockquote>
+<p>build命令使用Dockerfile文件创建镜像<br>docker build &lt;选项&gt;<dockerfile路径></dockerfile路径></p>
+</blockquote>
+<p>Dockerfile 路径可以使是本地路径，也可以是URL路径。若设置为 - ，则从标准输入获取Dockerfile的内容<br>–force-rm=false 创建镜像失败时，删除临时容器<br>–no-cache=false 不使用之前构建中创建的缓存。<br>-q、–quiet=false 不显示Dockerfile的RUN运行的输出结果<br>–rm=true 创建镜像成功时，删除临时容器<br>-t、–tag=”” 设置注册名称、镜像名称、标签。格式为 &lt;注册名称&gt;/&lt;镜像名称&gt;:&lt;标签&gt;（标签默认为latest）</p>
+<h1 id="commit-命令"><a href="#commit-命令" class="headerlink" title="commit 命令"></a>commit 命令</h1><blockquote>
+<p>commit命令用于从容器的修改项创建显得镜像<br>docker commit &lt;选项&gt;&lt;容器名称，id&gt;/&lt;镜像名称&gt;:&lt;标签&gt;</p>
+</blockquote>
+<p>-a、–author=”” 设置奖项创建者的有关信息<br>-m、–message=”” 设置有关变更事项的日志信息<br>-p、–pause=true 创建镜像是暂停容器</p>
+<h1 id="cp-命令"><a href="#cp-命令" class="headerlink" title="cp 命令"></a>cp 命令</h1><blockquote>
+<p>cp命令用于将容器的目录或文件复制的到主机。若将cp命令中的路径设置为目录，则将该目录下的所有内容复制到主机</p>
+</blockquote>
+<p>docker cp &lt;容器名称&gt;:&lt;路径&gt;&lt;主机路径&gt;<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker cp hello:/etc . 将容器内的整个/etc 目录复制到主机当前文件夹下</div></pre></td></tr></table></figure></p>
+<h1 id="create-命令"><a href="#create-命令" class="headerlink" title="create 命令"></a>create 命令</h1><blockquote>
+<p>create 命令使用指定的镜像创建容器。与run命令不同，使用create命令只能创建容器而并不启动<br>docker create &lt;选项&gt;&lt;镜像名称,id&gt;&lt;命令&gt;&lt;参数&gt;</p>
+</blockquote>
+<p>-a 、–attach=[] 将标准输入、标准输出、标准错误链接到容器<br>–attach=”stdin”</p>
+<p>–add-host=[] 向容器的/etc/hosts添加主机名与IP地址<br>–add-host=hello:192.168.0.233</p>
+<p>-C、–cpu-shares=0 设置cup资源分配。默认是这值为1024，各值为相对值<br>若设置为–cpu-shares=2048, 则分配默认值为2倍的CPU资源<br>在Linux内核的cgroups中使用该设置的值<br>–cap-add[] 设置容器中使用的cgroups的特定Capablity。若设置为ALL，则使用所有的Capablity<br>–cap-drop=[] 从容器删除cgroup的特定Capablity<br>–cidfile=”” 设置cid文件路径。cid中存储着所创建容器的id<br>–cpuset=”” 在多核CPU中设置要运行容器的核心数<br>若设置–cpuset=”0,1” 则使用第一与第二个cup<br>若这是–cupset=”0-2” 则使用从第一到第三个cup<br>–device=[] 添加主机设备到容器，格式为&lt;主机设备&gt;:&lt;容器设备&gt;<br>若设置为 –device=”/dev/sda1:/dev/sda1”,则在容器中也可以使用主机的/dev/sda1块设备</p>
+<p>–dns=[] 设置容器中要用到的DNS服务器<br>–dns-search=[] 设置docker要使用的DNS搜索域。<br>-e、–env=[] 向容器设置环境变量。一般用于传递设置或者密码<br>如：-e MYSQL_ROOT_PASSWORD=root<br>–entrypoint=”” 忽略Dockerfile的ENTRYPOINT设置，强制设置为其他值。<br>如：–entrypoint=”/bin/bash”<br>–env-file=[] 向容器应用设置环境变量文件<br>–expose=[] 仅连接容器的端口与主机，并不暴露在外<br>–expose=”3306”<br>-h、–hostname=”” 设置容器主机名<br>-i、–interactive=false 激活标准输入，即使未与容器连接（attach），也维持标准输入。一般使用该选项向Bash输入命令<br>–link=[] 进行容器连接，格式为&lt;容器名称&gt;:&lt;别名&gt;<br>–link mysql-server:mysql</p>
+<p>–lxc-conf=[] 若使用LXC驱动，则可以设置LXC选项<br>–lxc-conf=”lxc.cgroup.cpuset.cpu = 0,1”    </p>
+<p>-m、–memory=”” 设置内存限制，格式为&lt;数字&gt;&lt;单位&gt;，单位可以使用b,k,m,g<br>–memory=”512m”<br>–name 设置容器名称<br>–net=”bridge” 设置容器的网络模式（选项可以是：bridge,none,container,host）<br>-P、–publish-all=false 将连接到主机的容器的所有端口暴露在外<br>-p、–publish=[] 将连接到主机的容器的特定端口暴露在外。一般主要用于暴露web服务器的端口<br>–privileged=false 在容器内部使用主机的所有Linux内核功能<br>–restart=”” 设置容器内部进程终止时重启策略<br>–restart=no 即使进程终止也不重启<br>–restart=”on-failure” 仅当进程的Exit Code 不为0时执行重启。也可以设置重置次数。若不设置重试次数，这不断重启。如 –restart=”no-failure:10”<br>–restart=”always” 不受Exit Code的影响，总是重启<br>–security-opt=[] 设置SELinux、AppArmor 选项<br>-t、–tty=false 使用TTY模式（pseudo-TTY）。若要使用Bash，则必须设置该选项。若不设置该选项，则可以输入命令，但不显示shell<br>-u、–user=”” 设置容器运行时要使用的Linux用户账户与UID<br>-v、–volume=[] 设置数据卷。设置要与主机共享目录，不将文件保存到容器，而直接保存到主机。在主机目录后添加 :ro、:rw进行读写设置，默认为:rw。<br>–volumes-from=[] 连接数据卷容器，设置格式为&lt;容器名，id&gt;:&lt;:ro, :rw&gt; 默认情形下，读写设置遵从-v选项的设置。<br>-w、–workdir=”” 设置容器内部要运行进程的目录<br>运行如下命令，创建容器<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">$ docker create -it --name hello ubuntu /bin/bash</div><div class="line">若想使用刚刚创建的容器，则必须使用docker start 命令启动容器</div><div class="line">$ docker start hello</div><div class="line">进入容器内部</div><div class="line">$ docker attach hello</div><div class="line">···</div><div class="line"><span class="comment"># diff 命令</span></div><div class="line">&gt; diff命令用于检查容器文件系统的修改</div><div class="line">&gt; docker diff &lt;容器名称，id&gt;</div><div class="line"></div><div class="line">比较文件是否修改的标准是容器创建时的镜像内容</div><div class="line">A：添加的文件</div><div class="line">C：修改的文件</div><div class="line">D：删除的文件</div><div class="line"><span class="comment"># events 命令</span></div><div class="line">&gt; events命令用于实时输出Docker服务器中发生的事件</div><div class="line">```sh</div><div class="line">docker events</div></pre></td></tr></table></figure></p>
+<p>–since=”” 输出特定的timestamp之后的事件<br>–until=”” 输出特定的timestamp之前的事件<br>运行docker events命令，进入待机状态<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker events</div></pre></td></tr></table></figure></p>
+<p>在另一终端，运行容器<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker start hello <span class="comment">#假设容器已存在</span></div></pre></td></tr></table></figure></p>
+<p>就会在刚刚的docker events 命令窗口看到 运行hello 容器的事件</p>
+<h1 id="exec-命令"><a href="#exec-命令" class="headerlink" title="exec 命令"></a>exec 命令</h1><blockquote>
+<p>exec命令用于从外部运行容器内部的命令<br>docker exec &lt;选项&gt;&lt;容器名称，id&gt;&lt;命令&gt;&lt;参数&gt;</p>
+</blockquote>
+<p>-d、–detach=false 以后台模式运行命令<br>-i、–interactive=false 开启标准输入，即使未与容器连接，也维持标准输入<br>-t、–tty=false 使用TTY模式（pseudo-TTY）若要使用bash，则必须设置该选项。若不设置该选项，则虽然输入命令，但不显示shell<br>运行如下命令，创建容器<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ docker run <span class="_">-d</span> --name hello ubuntu /bin/bash -c <span class="string">"while true; do echo Hello World; sleep 1; done"</span></div><div class="line">设置每隔一秒输出一次hello world。在此状态下，运行容器内部的/bin/bash,连接至bash shell ，如下所示。连接bash shell 时，只有使用 -i -t 选项才能输入命令并查看结果</div><div class="line">$ docker <span class="built_in">exec</span> -it hello /bin/bash  <span class="comment">#连接容器</span></div><div class="line">$ ps ax  <span class="comment"># 查看进程</span></div></pre></td></tr></table></figure></p>
+<p>若在容器内部运行ps ax 命令，则可以看到由docker exec 命令运行的其他/bin/bash，与输出hello world 的/bin/bash 不是同一个。输入exit命令退出Bash shell后，容器不会停止，而会继续运行。像这样，灵活使用 docker exec 命令将Bash shell 连接到正在运行守护进程的容器上，并行多种操作<br>如下：不连接Bash shell，而使用apt-get等命令，在容器内安装redis-server包，<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ docker <span class="built_in">exec</span> hello apt-get update</div><div class="line">$ docker <span class="built_in">exec</span> hello apt-get install -y redis-server</div><div class="line">$ docker <span class="built_in">exec</span> <span class="_">-d</span> hello redis-server <span class="comment"># 后台运行rides-server</span></div></pre></td></tr></table></figure></p>
+<h1 id="export-命令"><a href="#export-命令" class="headerlink" title="export 命令"></a>export 命令</h1><blockquote>
+<p>export命令将用于将容器的文件系统导出为tar文件包</p>
+</blockquote>
+<p>docker export &lt;容器名称，id&gt;<br>只运行docker export 命令后，由于容器的内容会输出到标准输出，所以必须设置重定向<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ docker run -it <span class="_">-d</span> --name hello ubuntu /bin/bash</div><div class="line">$ docker <span class="built_in">export</span> hello &gt; hello.tar</div></pre></td></tr></table></figure></p>
+<h1 id="history-命令"><a href="#history-命令" class="headerlink" title="history 命令"></a>history 命令</h1><blockquote>
+<p>history 命令用于显示镜像的历史。此处的历史依据Dockerfile文件中的设置创建。<br>docker history &lt;选项&gt;&lt;镜像名称，id&gt;</p>
+</blockquote>
+<p>–no-trunc=false 输出所有因内容过长而省略的部分<br>-q、–quiet=false 只显示镜像id</p>
+<h1 id="images-命令"><a href="#images-命令" class="headerlink" title="images 命令"></a>images 命令</h1><blockquote>
+<p>images命令用于输出镜像列表<br>docker images &lt;选项&gt;&lt;镜像名称，id&gt;</p>
+</blockquote>
+<p>-a、–all=false 列出所有镜像，包括父镜像<br>-f、–filter=[] 设置输出结果过滤。若设置为”dangling=true”，则只输出无名镜像<br>–no-trunc=false 显示所有因内容过长而省略的部分</p>
+<h1 id="import-命令"><a href="#import-命令" class="headerlink" title="import 命令"></a>import 命令</h1><blockquote>
+<p>import命令用于从压缩为tar文件（.tar .tar.gz .tgz .bzip .tar.xz .txz）的文件系统创建镜像<br>docker import <tar文件的url或者 -="">&lt;注册名称&gt;/&lt;镜像名称&gt;:&lt;标签&gt;</tar文件的url或者></p>
+</blockquote>
+<p>使用import命令时，可以设置tar文件的URL，若设置为 - ，则从标准输入接收tar文件的内容。既可以使用由docker export 命令创建的tar文件，也可以直接组织文件系统。<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker import http://example.com/hello.tar.zg hello</div></pre></td></tr></table></figure></p>
+<p>下列命令中使用本地的 hello.tar 文件的内容通过管道传递给 docker import 命令<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ cat hello.tar | docker import - hello</div></pre></td></tr></table></figure></p>
+<p>若想将当前目录的内容直接创建为镜像：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ tar -c . | docker import - hello</div></pre></td></tr></table></figure></p>
+<h1 id="info-命令"><a href="#info-命令" class="headerlink" title="info 命令"></a>info 命令</h1><blockquote>
+<p>info命令用于显示当前系统信息、docker容器、镜像个数、设置等信息。</p>
+</blockquote>
+<p>docker info<br>inspect 命令<br>inspect 命令用于以JSON格式显示容器与镜像的详细信息<br>docker inspect &lt;选项&gt;&lt;容器或镜像名称，id&gt;<br>-f、–format=”” 只显示指定信息。如：”{{.NetworkSettings.IPAddress}}“ 使用 . 来设置JSON文档的下层项目<br>下面命令显示容器的IP地址<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ docker run -it <span class="_">-d</span> --name hello ubuntu /bin/bash</div><div class="line">$ docker inspect <span class="_">-f</span> <span class="string">"&#123;&#123;.NetworkSettings.IPAddress&#125;&#125;"</span> hello</div></pre></td></tr></table></figure></p>
+<p>下面命令只从容器的详细信息中抽取特定部分，并按照所希望的格式显示<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ docker run -it <span class="_">-d</span> --name hello -p 8000:80 -p 8080:8080 ubuntu /bin/bash</div><div class="line">$ docker inspect <span class="_">-f</span> <span class="string">'&#123;&#123;range $p, $conf := .NetworkSettings.Ports&#125;&#125; &#123;&#123;$p&#125;&#125; -&gt; &#123;&#123;(index $conf 0).HostPort&#125;&#125; &#123;&#123;end&#125;&#125;'</span> hello</div></pre></td></tr></table></figure></p>
+<p>此处使用 {{range $p, $conf := .NetworkSettings.Ports}} 循环访问 .NetworkSettings.Ports 的值，并代入 $p $conf。然后输出$p,并将$conf数组的第一项 (index $conf 0) 的 .HostPort 输出。<br>另：.NetworkSettings.Ports 是一个map类型数据结构：<br> map[80/tcp:[{0.0.0.0 8000}] 8080/tcp:[{0.0.0.0 8080}]]</p>
+<h1 id="kill-命令"><a href="#kill-命令" class="headerlink" title="kill 命令"></a>kill 命令</h1><blockquote>
+<p>kill命令用于向容器发送KILL信号，从而关闭容器（推荐使用更优雅温和的 docker stop 命令)<br>docker &lt;选项&gt;&lt;容器名称，id&gt;</p>
+</blockquote>
+<p>-s、–signal=”KILL” 发送特定信号</p>
+<h1 id="load-命令"><a href="#load-命令" class="headerlink" title="load 命令"></a>load 命令</h1><blockquote>
+<p>load命令用于从tar文件创建镜像<br>docker load &lt;选项&gt;</p>
+</blockquote>
+<p>将tar文件发送到 docker load 命令的标准输入，然后创建镜像。tar文件由 docker save 命令创建，包含镜像名称与标签。<br>-i、–input=”” 不使用标准输入，设置文件路径并创建镜像。<br><code>sh
+$ docker save myimages &gt; myimages.tar  #将已存在的镜像保存为tar文件
+$ docker load &lt; myimages.tar  #在另一台电脑从tar文件创建镜像</code>sh</p>
+<p>#login 命令</p>
+<blockquote>
+<p>login命令用于登录Docker 的注册服务器<br>docker login &lt;选项&gt;<docker 注册服务器的url=""></docker></p>
+</blockquote>
+<p>若不设置注册服务器的地址，则默认登录dockerhub（api <a href="https://index.docker.io/v1/）" target="_blank" rel="external">https://index.docker.io/v1/）</a><br>-e、–email=”” 设置登录时使用的电子邮件<br>-p、–password=”” 设置登录密码<br>-u、–username=”” 设置登录时使用的账号</p>
+<h1 id="logout-命令"><a href="#logout-命令" class="headerlink" title="logout 命令"></a>logout 命令</h1><blockquote>
+<p>logout命令用于从Docker注册服务器中登出<br>docker logout &lt;选项&gt;<docker 注册服务器的url=""></docker></p>
+</blockquote>
+<p>若不设置注册服务器的地址，则默认为dockerhub（api <a href="https://index.docker.io/v1/）" target="_blank" rel="external">https://index.docker.io/v1/）</a></p>
+<h1 id="logs-命令"><a href="#logs-命令" class="headerlink" title="logs 命令"></a>logs 命令</h1><blockquote>
+<p>logs命令用于输出容器日志<br>docker logs &lt;容器名称，id&gt;</p>
+</blockquote>
+<p>-f、–follow=false 一直输出实时日志<br>-t、–timestamp=false 在登录时显示时间值<br>–tail=”all” 指定数字，只从日志中输出一定个数</p>
+<h1 id="port-命令"><a href="#port-命令" class="headerlink" title="port 命令"></a>port 命令</h1><blockquote>
+<p>port命令用于查看容器的某个端口是否处于开放状态<br>docker port &lt;容器名称，id&gt;&lt;端口&gt;</p>
+</blockquote>
+<h1 id="pause-命令"><a href="#pause-命令" class="headerlink" title="pause 命令"></a>pause 命令</h1><blockquote>
+<p>pause命令用于暂停容器中正在运行的所有进程<br>docker pause &lt;容器名称，id&gt;</p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Docker/" rel="tag"># Docker</a>
+          
+            <a href="/tags/Technology/" rel="tag"># Technology</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/11/Docker常用命令 （二）/" rel="next" title="Docker常用命令(二)">
+                <i class="fa fa-chevron-left"></i> Docker常用命令(二)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/11/Docker安装/" rel="prev" title="Docker安装">
+                Docker安装 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="zhkui" />
+          <p class="site-author-name" itemprop="name">zhkui</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#docker基础命令"><span class="nav-number">2.</span> <span class="nav-text">docker基础命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#attach命令"><span class="nav-number">3.</span> <span class="nav-text">attach命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#build-命令"><span class="nav-number">4.</span> <span class="nav-text">build 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#commit-命令"><span class="nav-number">5.</span> <span class="nav-text">commit 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cp-命令"><span class="nav-number">6.</span> <span class="nav-text">cp 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#create-命令"><span class="nav-number">7.</span> <span class="nav-text">create 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#exec-命令"><span class="nav-number">8.</span> <span class="nav-text">exec 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#export-命令"><span class="nav-number">9.</span> <span class="nav-text">export 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#history-命令"><span class="nav-number">10.</span> <span class="nav-text">history 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#images-命令"><span class="nav-number">11.</span> <span class="nav-text">images 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#import-命令"><span class="nav-number">12.</span> <span class="nav-text">import 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#info-命令"><span class="nav-number">13.</span> <span class="nav-text">info 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#kill-命令"><span class="nav-number">14.</span> <span class="nav-text">kill 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#load-命令"><span class="nav-number">15.</span> <span class="nav-text">load 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#logout-命令"><span class="nav-number">16.</span> <span class="nav-text">logout 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#logs-命令"><span class="nav-number">17.</span> <span class="nav-text">logs 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#port-命令"><span class="nav-number">18.</span> <span class="nav-text">port 命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pause-命令"><span class="nav-number">19.</span> <span class="nav-text">pause 命令</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-zhakui"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhkui</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

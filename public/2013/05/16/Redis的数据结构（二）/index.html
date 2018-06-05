@@ -74,7 +74,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Rides," />
+  <meta name="keywords" content="Technology,Server,Rides," />
 
 
 
@@ -90,17 +90,17 @@
 
 
 
-<meta name="description" content="在上文Redis的数据结构(一)中，我们了解了Redis的两种数据类型(String和Hash)，这篇文章我们将继续了解其他几种数据类型。在Redis中总共有5中数据类型：  String——字符串 Hash——字典 List——列表 Set——集合 Sorted Set——有序集合  1. String–列表一般意义上讲，列表就是有序元素的序列：10,20,1,2,3就是一个列表。但用数组实现的">
-<meta name="keywords" content="Rides">
+<meta name="description" content="在上文Redis的数据结构(一)中，我们了解了Redis的两种数据类型(String和Hash)，这篇文章我们将继续了解其他几种数据类型。在Redis中总共有5中数据类型：  String——字符串 Hash——字典 List——列表 Set——集合 Sorted Set——有序集合  1. List——列表一般意义上讲，列表就是有序元素的序列：10,20,1,2,3就是一个列表。但用数组实现的">
+<meta name="keywords" content="Technology,Server,Rides">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis的数据结构（二）">
 <meta property="og:url" content="http://zhkui.com/2013/05/16/Redis的数据结构（二）/index.html">
 <meta property="og:site_name" content="ZhangKui&#x2F;Blog">
-<meta property="og:description" content="在上文Redis的数据结构(一)中，我们了解了Redis的两种数据类型(String和Hash)，这篇文章我们将继续了解其他几种数据类型。在Redis中总共有5中数据类型：  String——字符串 Hash——字典 List——列表 Set——集合 Sorted Set——有序集合  1. String–列表一般意义上讲，列表就是有序元素的序列：10,20,1,2,3就是一个列表。但用数组实现的">
-<meta property="og:updated_time" content="2017-05-16T02:36:55.788Z">
+<meta property="og:description" content="在上文Redis的数据结构(一)中，我们了解了Redis的两种数据类型(String和Hash)，这篇文章我们将继续了解其他几种数据类型。在Redis中总共有5中数据类型：  String——字符串 Hash——字典 List——列表 Set——集合 Sorted Set——有序集合  1. List——列表一般意义上讲，列表就是有序元素的序列：10,20,1,2,3就是一个列表。但用数组实现的">
+<meta property="og:updated_time" content="2017-09-08T10:18:46.047Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis的数据结构（二）">
-<meta name="twitter:description" content="在上文Redis的数据结构(一)中，我们了解了Redis的两种数据类型(String和Hash)，这篇文章我们将继续了解其他几种数据类型。在Redis中总共有5中数据类型：  String——字符串 Hash——字典 List——列表 Set——集合 Sorted Set——有序集合  1. String–列表一般意义上讲，列表就是有序元素的序列：10,20,1,2,3就是一个列表。但用数组实现的">
+<meta name="twitter:description" content="在上文Redis的数据结构(一)中，我们了解了Redis的两种数据类型(String和Hash)，这篇文章我们将继续了解其他几种数据类型。在Redis中总共有5中数据类型：  String——字符串 Hash——字典 List——列表 Set——集合 Sorted Set——有序集合  1. List——列表一般意义上讲，列表就是有序元素的序列：10,20,1,2,3就是一个列表。但用数组实现的">
 
 
 
@@ -316,8 +316,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/server-technology/" itemprop="url" rel="index">
-                    <span itemprop="name">server technology</span>
+                  <a href="/categories/Server/" itemprop="url" rel="index">
+                    <span itemprop="name">Server</span>
                   </a>
                 </span>
 
@@ -350,7 +350,8 @@
       
 
       
-        <p>在上文<a href="http://zhkui.com/2017/05/15/Redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">Redis的数据结构(一)</a>中，我们了解了Redis的两种数据类型(String和Hash)，这篇文章我们将继续了解其他几种数据类型。在Redis中总共有5中数据类型：</p>
+        <hr>
+<p>在上文<a href="http://zhkui.com/2017/05/15/Redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">Redis的数据结构(一)</a>中，我们了解了Redis的两种数据类型(String和Hash)，这篇文章我们将继续了解其他几种数据类型。在Redis中总共有5中数据类型：</p>
 <ul>
 <li>String——字符串</li>
 <li>Hash——字典</li>
@@ -358,7 +359,7 @@
 <li>Set——集合</li>
 <li>Sorted Set——有序集合</li>
 </ul>
-<h1 id="1-String–列表"><a href="#1-String–列表" class="headerlink" title="1. String–列表"></a>1. String–列表</h1><p>一般意义上讲，列表就是有序元素的序列：10,20,1,2,3就是一个列表。但用数组实现的List和用Linked List实现的List，在属性方面大不相同。<br>Redis lists基于Linked Lists实现。这意味着即使在一个list中有数百万个元素，在头部或尾部添加一个元素的操作，其时间复杂度也是常数级别的。用LPUSH命令在十个元素的list头部添加新元素，和在千万元素list头部添加新元素的速度相同。那么，坏消息是什么？在数组实现的list中利用索引访问元素的速度极快，而同样的操作在linked list实现的list上没有那么快。<br>Redis Lists用linked list实现的原因是：对于数据库系统来说，至关重要的特性是：能非常快的在很大的列表上添加元素。另一个重要因素是，正如你将要看到的：Redis lists能在常数时间取得常数长度。</p>
+<h1 id="1-List——列表"><a href="#1-List——列表" class="headerlink" title="1. List——列表"></a>1. List——列表</h1><p>一般意义上讲，列表就是有序元素的序列：10,20,1,2,3就是一个列表。但用数组实现的List和用Linked List实现的List，在属性方面大不相同。<br>Redis lists基于Linked Lists实现。这意味着即使在一个list中有数百万个元素，在头部或尾部添加一个元素的操作，其时间复杂度也是常数级别的。用LPUSH命令在十个元素的list头部添加新元素，和在千万元素list头部添加新元素的速度相同。那么，坏消息是什么？在数组实现的list中利用索引访问元素的速度极快，而同样的操作在linked list实现的list上没有那么快。<br>Redis Lists用linked list实现的原因是：对于数据库系统来说，至关重要的特性是：能非常快的在很大的列表上添加元素。另一个重要因素是，正如你将要看到的：Redis lists能在常数时间取得常数长度。</p>
 <p>LPUSH 命令可向list的左边（头部）添加一个新元素，而RPUSH命令可向list的右边（尾部）添加一个新元素。最后LRANGE 命令可从list中取出一定范围的元素<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">$ redis-cli rpush messages <span class="string">"Hello"</span></div><div class="line">OK</div><div class="line">$ redis-cli rpush messages <span class="string">"Redis：hello"</span></div><div class="line">OK</div><div class="line">$ redis-cli rpush messages <span class="string">"I'm a NOSQL"</span></div><div class="line">OK</div><div class="line">$ redis-cli lrange messages 0 2</div><div class="line">1. Hello</div><div class="line">2. Redis：hello</div><div class="line">3. I<span class="string">'m a NOSQL</span></div></pre></td></tr></table></figure></p>
 <p>注意LRANGE 带有两个索引，一定范围的第一个和最后一个元素。这两个索引都可以为负来告知Redis从尾部开始计数，因此-1表示最后一个元素，-2表示list中的倒数第二个元素，以此类推。<br>正如你可以从上面的例子中猜到的，list可被用来实现聊天系统。还可以作为不同进程间传递消息的队列。关键是，你可以每次都以原先添加的顺序访问数据。这不需要任何SQL ORDER BY 操作，将会非常快，也会很容易扩展到百万级别元素的规模。</p>
 <p>在上面的例子里 ，我们将“对象”（此例中是简单消息）直接压入Redis list，但通常不应这么做，由于对象可能被多次引用：例如在一个list中维护其时间顺序，在一个集合中保存它的类别，只要有必要，它还会出现在其他list中，等等。<br>例如我们有一个新闻列表，我们将用户提交的链接（新闻）添加到list中，可以用下面的方法：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ redis-cli incr next.news.id</div><div class="line">(<span class="built_in">integer</span>) 1</div><div class="line">$ redis-cli <span class="built_in">set</span> news:1:title <span class="string">"Redis的数据结构(一)"</span></div><div class="line">OK</div><div class="line">$ redis-cli <span class="built_in">set</span> news:1:url <span class="string">"http://zhkui.com/2017/05/15/Redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"</span></div><div class="line">OK</div><div class="line">$ redis-cli lpush submitted.news 1</div><div class="line">OK</div></pre></td></tr></table></figure></p>
@@ -398,6 +399,10 @@
       
         <div class="post-tags">
           
+            <a href="/tags/Technology/" rel="tag"># Technology</a>
+          
+            <a href="/tags/Server/" rel="tag"># Server</a>
+          
             <a href="/tags/Rides/" rel="tag"># Rides</a>
           
         </div>
@@ -420,6 +425,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013/06/20/JavaScript继承方式/" rel="prev" title="JavaScript继承方式">
+                JavaScript继承方式 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -491,7 +500,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -502,7 +511,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">5</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -513,7 +522,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -548,7 +557,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-String–列表"><span class="nav-number">1.</span> <span class="nav-text">1. String–列表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Set–集合"><span class="nav-number">2.</span> <span class="nav-text">2. Set–集合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Sorted-Set–有序集合"><span class="nav-number">3.</span> <span class="nav-text">3. Sorted Set–有序集合</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-List——列表"><span class="nav-number">1.</span> <span class="nav-text">1. List——列表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Set–集合"><span class="nav-number">2.</span> <span class="nav-text">2. Set–集合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Sorted-Set–有序集合"><span class="nav-number">3.</span> <span class="nav-text">3. Sorted Set–有序集合</span></a></li></ol></div>
             
 
           </div>
@@ -571,7 +580,7 @@
         <div class="copyright" >
   
   &copy;  2013 - 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-zhakui"></i>
   </span>

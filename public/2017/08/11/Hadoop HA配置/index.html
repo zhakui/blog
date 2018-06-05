@@ -1,0 +1,763 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Technology,Hadoop,Server," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="集群时间同步如果集群节点时间不同步，可能会出现节点宕机或引发其它异常问题，所以在生产环境中一般通过配置NTP服务器实现集群时间同步。本集群在master节点设置ntp服务器123456789101112131415//切换root用户$ su root# yum install -y ntp// 配置时间服务器# vim /etc/ntp.conf# 禁止所有机器连接ntp服务器restrict">
+<meta name="keywords" content="Technology,Hadoop,Server">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop HA配置">
+<meta property="og:url" content="http://zhkui.com/2017/08/11/Hadoop HA配置/index.html">
+<meta property="og:site_name" content="ZhangKui&#x2F;Blog">
+<meta property="og:description" content="集群时间同步如果集群节点时间不同步，可能会出现节点宕机或引发其它异常问题，所以在生产环境中一般通过配置NTP服务器实现集群时间同步。本集群在master节点设置ntp服务器123456789101112131415//切换root用户$ su root# yum install -y ntp// 配置时间服务器# vim /etc/ntp.conf# 禁止所有机器连接ntp服务器restrict">
+<meta property="og:updated_time" content="2017-09-08T10:17:32.567Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hadoop HA配置">
+<meta name="twitter:description" content="集群时间同步如果集群节点时间不同步，可能会出现节点宕机或引发其它异常问题，所以在生产环境中一般通过配置NTP服务器实现集群时间同步。本集群在master节点设置ntp服务器123456789101112131415//切换root用户$ su root# yum install -y ntp// 配置时间服务器# vim /etc/ntp.conf# 禁止所有机器连接ntp服务器restrict">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://zhkui.com/2017/08/11/Hadoop HA配置/"/>
+
+
+
+
+
+  <title>Hadoop HA配置 | ZhangKui/Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ZhangKui/Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://zhkui.com/2017/08/11/Hadoop HA配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zhkui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZhangKui/Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hadoop HA配置</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-11T17:28:43+08:00">
+                2017-08-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/BigData/" itemprop="url" rel="index">
+                    <span itemprop="name">BigData</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="集群时间同步"><a href="#集群时间同步" class="headerlink" title="集群时间同步"></a>集群时间同步</h1><p>如果集群节点时间不同步，可能会出现节点宕机或引发其它异常问题，所以在生产环境中一般通过配置NTP服务器实现集群时间同步。本集群在master节点设置ntp服务器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">//切换root用户</div><div class="line">$ su root</div><div class="line"># yum install -y ntp</div><div class="line">// 配置时间服务器</div><div class="line"># vim /etc/ntp.conf</div><div class="line"># 禁止所有机器连接ntp服务器</div><div class="line">restrict default ignore</div><div class="line"># 允许局域网内的所有机器连接ntp服务器</div><div class="line">restrict 172.16.20.0 mask 255.255.255.0 nomodify notrap</div><div class="line"># 使用本机作为时间服务器</div><div class="line">server 127.127.1.0</div><div class="line">// 启动ntp服务器</div><div class="line"># service ntpd start</div><div class="line">// 设置ntp服务器开机自动启动</div><div class="line"># chkconfig ntpd on</div></pre></td></tr></table></figure></p>
+<p>集群其它节点通过执行crontab定时任务，每天在指定时间向ntp服务器进行时间同步<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">// 切换root用户</div><div class="line">$ su root</div><div class="line">// 执行定时任务，每天00:00向服务器同步时间，并写入日志</div><div class="line"># crontab -e</div><div class="line">00-59  * * * /usr/sbin/ntpdate hadoop-master1&gt;&gt; /home/hadoop/ntpd.log</div><div class="line">// 查看任务</div><div class="line"># crontab -l</div></pre></td></tr></table></figure></p>
+<h1 id="Zookeeper集群安装"><a href="#Zookeeper集群安装" class="headerlink" title="Zookeeper集群安装"></a>Zookeeper集群安装</h1><p>Zookeeper是一个开源分布式协调服务,zookeeper服务可用于：统一命名服务、配置管理、锁服务、选举。大数据应用中主要使用Zookeeper的集群管理功能<br>首先下载zookeeper,我这里下载的是zookeeper-3.4.10，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">wget https://mirrors.tuna.tsinghua.edu.cn/apache/zookeeper/zookeeper-3.4.10/zookeeper-3.4.10.tar.gz</div><div class="line">//解压zookeeper</div><div class="line">tar  -xvf  zookeeper-3.4.10.tar.gz</div><div class="line">// 配置用户环境变量</div><div class="line">$ vi  ~/.bashrc</div><div class="line">export ZOOKEEPER_HOME=/root/zookeeper-3.4.10</div><div class="line">export PATH=$PATH:$ZOOKEEPER_HOME/bin</div><div class="line">// 使修改的环境变量生效</div><div class="line">$ source  ~/.bashrc</div><div class="line">// 修改zookeeper的配置文件</div><div class="line">$ cd  /root/zookeeper-3.4.10/conf/</div><div class="line">$ cp  zoo_sample.cfg  zoo.cfg</div><div class="line">$ vi  zoo.cfg</div><div class="line"># 客户端心跳时间(毫秒)</div><div class="line">tickTime=2000</div><div class="line"># 允许心跳间隔的最大时间</div><div class="line">initLimit=10</div><div class="line"># 同步时限</div><div class="line">syncLimit=5</div><div class="line"># 数据存储目录</div><div class="line">dataDir=/root/zookeeper-3.4.10/data</div><div class="line"># 数据日志存储目录</div><div class="line">dataLogDir=/root/zookeeper-3.4.10/data/log</div><div class="line"># 端口号</div><div class="line">clientPort=2181</div><div class="line"># 集群节点和服务端口配置</div><div class="line">server.1=master:2888:3888</div><div class="line">server.2=slave1:2888:3888</div><div class="line">server.3=slave2:2888:3888</div><div class="line"># 到每个节点的dataDir目录下创建一个myid文件，在文件里面写如对应服务名称：</div><div class="line">例如节点master</div><div class="line">server.1=master:2888:3888</div><div class="line">myid文件里面写而入1</div><div class="line">// 启动</div><div class="line">$ zkServer.sh start</div><div class="line">// 查看状态</div><div class="line">$ zkServer.sh status</div><div class="line">// 关闭</div><div class="line">$ zkServer.sh stop</div></pre></td></tr></table></figure></p>
+<h1 id="Hadoop-HA配置"><a href="#Hadoop-HA配置" class="headerlink" title="Hadoop HA配置"></a>Hadoop HA配置</h1><h2 id="配置core-site-xml文件"><a href="#配置core-site-xml文件" class="headerlink" title="配置core-site.xml文件"></a>配置core-site.xml文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">$ vi  core-site.xml</div><div class="line"></div><div class="line">&lt;configuration&gt;</div><div class="line">  &lt;!-- 指定hdfs的nameservices名称为mycluster，与hdfs-site.xml的HA配置相同 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;fs.defaultFS&lt;/name&gt;</div><div class="line">    &lt;value&gt;hdfs://mycluster&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">	</div><div class="line">  &lt;!-- 指定缓存文件存储的路径 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;</div><div class="line">    &lt;value&gt;/root/hadoop-2.8.1/tmp&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line"> &lt;!-- 配置hdfs文件被永久删除前保留的时间（单位：分钟），默认值为0表明垃圾回收站功能关闭 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;fs.trash.interval&lt;/name&gt;</div><div class="line">    &lt;value&gt;1440&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">  </div><div class="line">  &lt;!-- 指定zookeeper地址，配置HA时需要 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;ha.zookeeper.quorum&lt;/name&gt;</div><div class="line">    &lt;value&gt;master:2181,slave1:2181,slave2:2181&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
+<h2 id="配置hdfs-site-xml文件"><a href="#配置hdfs-site-xml文件" class="headerlink" title="配置hdfs-site.xml文件"></a>配置hdfs-site.xml文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div></pre></td><td class="code"><pre><div class="line">$ vi  hdfs-site.xml</div><div class="line"></div><div class="line">&lt;configuration&gt;</div><div class="line">  &lt;!-- 指定hdfs元数据存储的路径 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;</div><div class="line">    &lt;value&gt;/root/hadoop-2.8.1/namenode&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;!-- 指定hdfs数据存储的路径 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;dfs.datanode.data.dir&lt;/name&gt;</div><div class="line">    &lt;value&gt;/root/hadoop-2.8.1/datanode&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">  </div><div class="line">  &lt;!-- 数据备份的个数 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;dfs.replication&lt;/name&gt;</div><div class="line">    &lt;value&gt;3&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;!-- 关闭权限验证 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;dfs.permissions.enabled&lt;/name&gt;</div><div class="line">    &lt;value&gt;false&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">  </div><div class="line">  &lt;!-- 开启WebHDFS功能（基于REST的接口服务） --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;dfs.webhdfs.enabled&lt;/name&gt;</div><div class="line">    &lt;value&gt;true&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">  </div><div class="line">  ### 以下为HDFS HA的配置</div><div class="line">  &lt;!-- 指定hdfs的nameservices名称为mycluster --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;dfs.nameservices&lt;/name&gt;</div><div class="line">    &lt;value&gt;mycluster&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;!-- 指定mycluster的两个namenode的名称分别为nn1,nn2 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;dfs.ha.namenodes.mycluster&lt;/name&gt;</div><div class="line">    &lt;value&gt;nn1,nn2&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;!-- 配置nn1,nn2的rpc通信端口 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;dfs.namenode.rpc-address.mycluster.nn1&lt;/name&gt;</div><div class="line">    &lt;value&gt;master:8020&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;dfs.namenode.rpc-address.mycluster.nn2&lt;/name&gt;</div><div class="line">    &lt;value&gt;slave1:8020&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;!-- 配置nn1,nn2的http通信端口 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;dfs.namenode.http-address.mycluster.nn1&lt;/name&gt;</div><div class="line">    &lt;value&gt;master:50070&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;dfs.namenode.http-address.mycluster.nn2&lt;/name&gt;</div><div class="line">    &lt;value&gt;slave1:50070&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;!-- 指定namenode元数据存储在journalnode中的路径 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;dfs.namenode.shared.edits.dir&lt;/name&gt;</div><div class="line">&lt;value&gt;qjournal://master:8485;slave1:8485;slave2:8485/mycluste&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">  </div><div class="line">  &lt;!-- 指定journalnode日志文件存储的路径 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;dfs.journalnode.edits.dir&lt;/name&gt;</div><div class="line">    &lt;value&gt;/root/hadoop-2.8.1/journal&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;!-- 指定HDFS客户端连接active namenode的java类 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">&lt;name&gt;dfs.client.failover.proxy.provider.mycluster&lt;/name&gt;</div><div class="line">&lt;value&gt;org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;!-- 配置隔离机制为ssh --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;dfs.ha.fencing.methods&lt;/name&gt;</div><div class="line">    &lt;value&gt;sshfence&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;!-- 指定秘钥的位置 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;dfs.ha.fencing.ssh.private-key-files&lt;/name&gt;</div><div class="line">    &lt;value&gt;/root/.ssh/id_rsa&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">  </div><div class="line">  &lt;!-- 开启自动故障转移 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;dfs.ha.automatic-failover.enabled&lt;/name&gt;</div><div class="line">    &lt;value&gt;true&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
+<h2 id="配置mapred-site-xml文件"><a href="#配置mapred-site-xml文件" class="headerlink" title="配置mapred-site.xml文件"></a>配置mapred-site.xml文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line">$ vim mapred-site.xml</div><div class="line"></div><div class="line">&lt;configuration&gt;</div><div class="line">  &lt;!-- 指定MapReduce计算框架使用YARN --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;mapreduce.framework.name&lt;/name&gt;</div><div class="line">    &lt;value&gt;yarn&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;!-- 指定jobhistory server的rpc地址 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;mapreduce.jobhistory.address&lt;/name&gt;</div><div class="line">    &lt;value&gt;master:10020&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;!-- 指定jobhistory server的http地址 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;mapreduce.jobhistory.webapp.address&lt;/name&gt;</div><div class="line">    &lt;value&gt;master:19888&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;!-- 开启uber模式（针对小作业的优化） --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;mapreduce.job.ubertask.enable&lt;/name&gt;</div><div class="line">    &lt;value&gt;true&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;!-- 配置启动uber模式的最大map数 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;mapreduce.job.ubertask.maxmaps&lt;/name&gt;</div><div class="line">    &lt;value&gt;9&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;!-- 配置启动uber模式的最大reduce数 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;mapreduce.job.ubertask.maxreduces&lt;/name&gt;</div><div class="line">    &lt;value&gt;1&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">&lt;/configuration&gt;</div></pre></td></tr></table></figure>
+<h2 id="配置yarn-site-xml文件"><a href="#配置yarn-site-xml文件" class="headerlink" title="配置yarn-site.xml文件"></a>配置yarn-site.xml文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line">$ vim yarn-site.xml</div><div class="line"></div><div class="line">&lt;configuration&gt;</div><div class="line">  &lt;!-- NodeManager上运行的附属服务，需配置成mapreduce_shuffle才可运行MapReduce程序 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</div><div class="line">    &lt;value&gt;mapreduce_shuffle&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;!-- 配置Web Application Proxy安全代理（防止yarn被攻击） --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;yarn.web-proxy.address&lt;/name&gt;</div><div class="line">    &lt;value&gt;master:8888&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line">  </div><div class="line">  &lt;!-- 开启日志 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;yarn.log-aggregation-enable&lt;/name&gt;</div><div class="line">    &lt;value&gt;true&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;!-- 配置日志删除时间为7天，-1为禁用，单位为秒 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;yarn.log-aggregation.retain-seconds&lt;/name&gt;</div><div class="line">    &lt;value&gt;604800&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;!-- 修改日志目录 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;yarn.nodemanager.remote-app-log-dir&lt;/name&gt;</div><div class="line">    &lt;value&gt;/logs&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;!-- 配置nodemanager可用的资源内存 --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;yarn.nodemanager.resource.memory-mb&lt;/name&gt;</div><div class="line">    &lt;value&gt;2048&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">  &lt;!-- 配置nodemanager可用的资源CPU --&gt;</div><div class="line">  &lt;property&gt;</div><div class="line">    &lt;name&gt;yarn.nodemanager.resource.cpu-vcores&lt;/name&gt;</div><div class="line">    &lt;value&gt;2&lt;/value&gt;</div><div class="line">  &lt;/property&gt;</div><div class="line"></div><div class="line">``` </div><div class="line"></div><div class="line"># YARN HA的配置</div></pre></td></tr></table></figure>
+  <!-- 开启YARN HA -->
+  <property><br>    <name>yarn.resourcemanager.ha.enabled</name><br>    <value>true</value><br>  </property>
+
+  <!-- 启用自动故障转移 -->
+  <property><br>    <name>yarn.resourcemanager.ha.automatic-failover.enabled</name><br>    <value>true</value><br>  </property>
+
+  <!-- 指定YARN HA的名称 -->
+  <property><br>    <name>yarn.resourcemanager.cluster-id</name><br>    <value>yarncluster</value><br>  </property>
+
+  <!-- 指定两个resourcemanager的名称 -->
+  <property><br>    <name>yarn.resourcemanager.ha.rm-ids</name><br>    <value>rm1,rm2</value><br>  </property>
+
+  <!-- 配置rm1，rm2的主机 -->
+  <property><br>    <name>yarn.resourcemanager.hostname.rm1</name><br>    <value>slave1</value><br>  </property><br>  <property><br>    <name>yarn.resourcemanager.hostname.rm2</name><br>    <value>slave2</value><br>  </property>
+
+  <!-- 配置YARN的http端口 -->
+  <property><br>    <name>yarn.resourcemanager.webapp.address.rm1</name><br>    <value>slave1:8088</value><br>  </property><br>  <property><br>    <name>yarn.resourcemanager.webapp.address.rm2</name><br>    <value>slave2:8088</value><br>  </property>
+
+  <!-- 配置zookeeper的地址 -->
+  <property><br>    <name>yarn.resourcemanager.zk-address</name><br>    <value>master:2181,slave1:2181,slave2:2181</value><br>  </property>
+
+  <!-- 配置zookeeper的存储位置 -->
+  <property><br>    <name>yarn.resourcemanager.zk-state-store.parent-path</name><br>    <value>/rmstore</value><br>  </property>
+
+  <!-- 开启yarn resourcemanager restart -->
+  <property><br>    <name>yarn.resourcemanager.recovery.enabled</name><br>    <value>true</value><br>  </property>
+
+  <!-- 配置resourcemanager的状态存储到zookeeper中 -->
+  <property><br>    <name>yarn.resourcemanager.store.class</name><br>    <value>org.apache.hadoop.yarn.server.resourcemanager.recovery.ZKRMStateStore</value><br>  </property>
+
+  <!-- 开启yarn nodemanager restart -->
+  <property><br>    <name>yarn.nodemanager.recovery.enabled</name><br>    <value>true</value><br>  </property>
+
+  <!-- 配置nodemanager IPC的通信端口 -->
+<p>  <property><br>    <name>yarn.nodemanager.address</name><br>    <value>0.0.0.0:45454</value><br>  </property><br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># Hadoop集群的初始化</div><div class="line">启动zookeeper集群（分别在master、slave1和slave2上执行）</div></pre></td></tr></table></figure></p>
+<p>$ zkServer.shstart<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">格式化ZKFC（在master上执行）</div></pre></td></tr></table></figure></p>
+<p>$ hdfs  zkfc  -formatZK<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">// 启动journalnode（分别在master、slave1和slave2上执行）</div></pre></td></tr></table></figure></p>
+<p>$ hadoop-daemon.shstart  journalnode<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">// 格式化HDFS（在master上执行）</div></pre></td></tr></table></figure></p>
+<p>$ hdfs namenode  -format<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">// 将格式化后master节点hadoop工作目录中的元数据目录复制到slave1节点</div></pre></td></tr></table></figure></p>
+<p>$scp-r /root/hadoop-2.8.1/namenode/*  slave1:/root/hadoop-2.8.1/namenode/<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">// 初始化完毕后可关闭journalnode（分别在slave1、slave2和slave3上执行）</div></pre></td></tr></table></figure></p>
+<p>$ hadoop-daemon.sh  stop  journalnode</p>
+<h1 id="Hadoop集群的启动"><a href="#Hadoop集群的启动" class="headerlink" title="Hadoop集群的启动"></a>Hadoop集群的启动</h1><p>启动zookeeper集群（分别在master、slave和slave2执行）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ zkServer. shstart</div></pre></td></tr></table></figure></p>
+<p>启动HDFS（在master执行）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ start-dfs.sh</div></pre></td></tr></table></figure></p>
+<p>启动YARN（在slave1执行）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ start-yarn.sh</div></pre></td></tr></table></figure></p>
+<p>启动YARN的另一个ResourceManager（在master执行，用于容灾）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ yarn-daemon.sh start resourcemanager</div><div class="line"></div><div class="line">启动YARN的历史任务服务（在master1执行）</div></pre></td></tr></table></figure></p>
+<p>$ mr-jobhistory-daemon.sh starthistoryserver<br>```</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Technology/" rel="tag"># Technology</a>
+          
+            <a href="/tags/Hadoop/" rel="tag"># Hadoop</a>
+          
+            <a href="/tags/Server/" rel="tag"># Server</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/11/Hadoop基础知识整理/" rel="next" title="Hadoop基础知识整理">
+                <i class="fa fa-chevron-left"></i> Hadoop基础知识整理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/12/Hive学习笔记/" rel="prev" title="Hive学习笔记">
+                Hive学习笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="zhkui" />
+          <p class="site-author-name" itemprop="name">zhkui</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#集群时间同步"><span class="nav-number">1.</span> <span class="nav-text">集群时间同步</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Zookeeper集群安装"><span class="nav-number">2.</span> <span class="nav-text">Zookeeper集群安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hadoop-HA配置"><span class="nav-number">3.</span> <span class="nav-text">Hadoop HA配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置core-site-xml文件"><span class="nav-number">3.1.</span> <span class="nav-text">配置core-site.xml文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置hdfs-site-xml文件"><span class="nav-number">3.2.</span> <span class="nav-text">配置hdfs-site.xml文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置mapred-site-xml文件"><span class="nav-number">3.3.</span> <span class="nav-text">配置mapred-site.xml文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置yarn-site-xml文件"><span class="nav-number">3.4.</span> <span class="nav-text">配置yarn-site.xml文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hadoop集群的启动"><span class="nav-number">4.</span> <span class="nav-text">Hadoop集群的启动</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-zhakui"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhkui</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
