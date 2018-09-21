@@ -1,0 +1,725 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="算法," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="什么是布隆过滤器(Bloom Filter)布隆过滤器是布隆在1970年提出的。它实际是一个很长的二进制向量和一系列随机映射函数。布隆过滤器可以用于检索一个元素是否在一个集合中。他的优点是空间效率和查询时间都有远远超过一般算法，确定是一定的误识别率和删除困难。 基本概念一般判断一个元素是否在一个集合里，使用一个集合把所有的元素保存起来，再通过比较的方式判断。我们可能会想到使用下面的方式判断一个元素">
+<meta name="keywords" content="算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据排重算法：布隆过滤器">
+<meta property="og:url" content="http://zhkui.com/2017/01/11/大数据排重算法：布隆过滤器/index.html">
+<meta property="og:site_name" content="ZhangKui&#x2F;Blog">
+<meta property="og:description" content="什么是布隆过滤器(Bloom Filter)布隆过滤器是布隆在1970年提出的。它实际是一个很长的二进制向量和一系列随机映射函数。布隆过滤器可以用于检索一个元素是否在一个集合中。他的优点是空间效率和查询时间都有远远超过一般算法，确定是一定的误识别率和删除困难。 基本概念一般判断一个元素是否在一个集合里，使用一个集合把所有的元素保存起来，再通过比较的方式判断。我们可能会想到使用下面的方式判断一个元素">
+<meta property="og:image" content="https://t1.daumcdn.net/cfile/tistory/1423AF384F50A0442F">
+<meta property="og:updated_time" content="2018-06-08T04:31:50.463Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="大数据排重算法：布隆过滤器">
+<meta name="twitter:description" content="什么是布隆过滤器(Bloom Filter)布隆过滤器是布隆在1970年提出的。它实际是一个很长的二进制向量和一系列随机映射函数。布隆过滤器可以用于检索一个元素是否在一个集合中。他的优点是空间效率和查询时间都有远远超过一般算法，确定是一定的误识别率和删除困难。 基本概念一般判断一个元素是否在一个集合里，使用一个集合把所有的元素保存起来，再通过比较的方式判断。我们可能会想到使用下面的方式判断一个元素">
+<meta name="twitter:image" content="https://t1.daumcdn.net/cfile/tistory/1423AF384F50A0442F">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://zhkui.com/2017/01/11/大数据排重算法：布隆过滤器/"/>
+
+
+
+
+
+  <title>大数据排重算法：布隆过滤器 | ZhangKui/Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ZhangKui/Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://zhkui.com/2017/01/11/大数据排重算法：布隆过滤器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zhkui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZhangKui/Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">大数据排重算法：布隆过滤器</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-11T15:05:37+08:00">
+                2017-01-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/大数据/" itemprop="url" rel="index">
+                    <span itemprop="name">大数据</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="什么是布隆过滤器-Bloom-Filter"><a href="#什么是布隆过滤器-Bloom-Filter" class="headerlink" title="什么是布隆过滤器(Bloom Filter)"></a>什么是布隆过滤器(Bloom Filter)</h1><p>布隆过滤器是布隆在1970年提出的。它实际是一个很长的二进制向量和一系列随机映射函数。布隆过滤器可以用于检索一个元素是否在一个集合中。他的优点是空间效率和查询时间都有远远超过一般算法，确定是一定的误识别率和删除困难。</p>
+<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><p>一般判断一个元素是否在一个集合里，使用一个集合把所有的元素保存起来，再通过比较的方式判断。我们可能会想到使用下面的方式判断一个元素是否在集合中存在：</p>
+<ol>
+<li>在数据库中创建字段的UNIQUE属性</li>
+<li>在数据库中创建一个唯一的索引，在插入数据之前检查待插入的数据是否存在</li>
+<li>使用Set或HashSet保存数据，确保唯一</li>
+<li>使用Map或是一个定长数组记录某一个URL是否被访问过<br>但是，随着数据量不断增加，当数据达到几百G的时候。上面的方法就变的不在方便。上面的方法会占用巨大的存储空间以及随着数据增多效率降低。<br>布隆过滤器利用哈希函数将一个元素映射成一个阵列（Big array）中的一个点。这样我们只需要判断这个点是不是存在（值为1）就可以知道该元素是否存在于这个集合中。这就是布隆过滤器的思想。<br>通常布隆过滤器会使用多个hash函数计算出多个点，如果某个元素计算出的点其中有一个不再集合中我们就认为该元素肯定不再集合中。</li>
+</ol>
+<h1 id="布隆过滤器原理图解"><a href="#布隆过滤器原理图解" class="headerlink" title="布隆过滤器原理图解"></a>布隆过滤器原理图解</h1><p>布隆过滤器（Bloom Filter）的核心实现是一个超大的位数组和几个哈希函数。假设位数组的长度为m，哈希函数的个数为k<br><img src="https://t1.daumcdn.net/cfile/tistory/1423AF384F50A0442F" alt="布隆过滤器原理图"><br>以上图为例，具体的操作流程：假设集合里面有3个元素{x, y, z}，哈希函数的个数为3。首先将位数组进行初始化，将里面每个位都设置位0。对于集合里面的每一个元素，将元素依次通过3个哈希函数进行映射，每次映射都会产生一个哈希值，这个值对应位数组上面的一个点，然后将位数组对应的位置标记为1。查询W元素是否存在集合中的时候，同样的方法将W通过哈希映射到位数组上的3个点。如果3个点的其中有一个点不为1，则可以判断该元素一定不存在集合中。反之，如果3个点都为1，则该元素可能存在集合中。注意：此处不能判断该元素是否一定存在集合中，可能存在一定的误判率。可以从图中可以看到：假设某个元素通过映射对应下标为4，5，6这3个点。虽然这3个点都为1，但是很明显这3个点是不同元素经过哈希得到的位置，因此这种情况说明元素虽然不在集合中，也可能对应的都是1，这是误判率存在的原因。</p>
+<h1 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h1><p>与其他的判断方法相比，布隆过滤器在空间和时间上都有巨大的优势，布隆过滤器存储空间和插入、查询时间都是常数。布隆过滤器不存储元素本身，对信息安全要求较高的场合非常有利。</p>
+<h1 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h1><p>但是，布隆过滤器的确定也很明显。布隆过滤器室友误算率的。随着存入的数据增加，误算率也随之增加。如果数据量少。hash表就可以表示了。另外就是，布隆过滤器一般情况下都是不能删除元素的。</p>
+<p><a href="http://www.cnblogs.com/allensun/archive/2011/02/16/1956532.html" target="_blank" rel="external">参考：布隆过滤器的空间、插入/询时间及误判率的数学证明</a></p>
+<h1 id="布隆过滤器的java实现"><a href="#布隆过滤器的java实现" class="headerlink" title="布隆过滤器的java实现"></a>布隆过滤器的java实现</h1><p>布隆过滤器的空间复杂度是S(n)=O(n)。下面是一个简单的布隆过滤器Java代码展示。而在查重过程也很有效率，时间复杂度是T(n)=O(1)。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> java.util.BitSet;  </div><div class="line">  </div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BloomFilter</span> </span>&#123;  </div><div class="line">      </div><div class="line">    <span class="comment">/* BitSet初始分配2^24个bit */</span>  </div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_SIZE = <span class="number">1</span> &lt;&lt; <span class="number">25</span>;  </div><div class="line">      </div><div class="line">    <span class="comment">/* 不同哈希函数的种子，一般应取质数 */</span>  </div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span>[] seeds = <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; <span class="number">5</span>, <span class="number">7</span>, <span class="number">11</span>, <span class="number">13</span>, <span class="number">31</span>, <span class="number">37</span>, <span class="number">61</span> &#125;;  </div><div class="line">      </div><div class="line">    <span class="keyword">private</span> BitSet bits = <span class="keyword">new</span> BitSet(DEFAULT_SIZE);  </div><div class="line">      </div><div class="line">    <span class="comment">/* 哈希函数对象 */</span>  </div><div class="line">    <span class="keyword">private</span> SimpleHash[] func = <span class="keyword">new</span> SimpleHash[seeds.length];  </div><div class="line">  </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BloomFilter</span><span class="params">()</span> </span>&#123;  </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; seeds.length; i++) &#123;  </div><div class="line">            func[i] = <span class="keyword">new</span> SimpleHash(DEFAULT_SIZE, seeds[i]);  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    <span class="comment">// 将字符串标记到bits中  </span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(String value)</span> </span>&#123;  </div><div class="line">        <span class="keyword">for</span> (SimpleHash f : func) &#123;  </div><div class="line">            bits.set(f.hash(value), <span class="keyword">true</span>);  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    <span class="comment">// 判断字符串是否已经被bits标记  </span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(String value)</span> </span>&#123;  </div><div class="line">        <span class="keyword">if</span> (value == <span class="keyword">null</span>) &#123;  </div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;  </div><div class="line">        &#125;  </div><div class="line">          </div><div class="line">        <span class="keyword">boolean</span> ret = <span class="keyword">true</span>;  </div><div class="line">        <span class="keyword">for</span> (SimpleHash f : func) &#123;  </div><div class="line">            ret = ret &amp;&amp; bits.get(f.hash(value));  </div><div class="line">        &#125;  </div><div class="line">          </div><div class="line">        <span class="keyword">return</span> ret;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    <span class="comment">/* 哈希函数类，可以采用成熟的hash函数 */</span>  </div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleHash</span> </span>&#123;  </div><div class="line">        <span class="keyword">private</span> <span class="keyword">int</span> cap;  </div><div class="line">        <span class="keyword">private</span> <span class="keyword">int</span> seed;  </div><div class="line">  </div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">SimpleHash</span><span class="params">(<span class="keyword">int</span> cap, <span class="keyword">int</span> seed)</span> </span>&#123;  </div><div class="line">            <span class="keyword">this</span>.cap = cap;  </div><div class="line">            <span class="keyword">this</span>.seed = seed;  </div><div class="line">        &#125;  </div><div class="line">  </div><div class="line">        <span class="comment">// hash函数，采用简单的加权和hash  </span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(String value)</span> </span>&#123;  </div><div class="line">            <span class="keyword">int</span> result = <span class="number">0</span>;  </div><div class="line">            <span class="keyword">int</span> len = value.length();  </div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;  </div><div class="line">                result = seed * result + value.charAt(i);  </div><div class="line">            &#125;  </div><div class="line">            <span class="keyword">return</span> (cap - <span class="number">1</span>) &amp; result;  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h1 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h1><ol>
+<li>假定我们存储一亿个电子邮件地址，我们先建立一个十六亿二进制（比特），即两亿字节的向量，然后将这十六亿个二进制全部设置为零。对于每一个电子邮件地址 X，我们用八个不同的随机数产生器（F1,F2, …,F8） 产生八个信息指纹（f1, f2, …, f8）。再用一个随机数产生器 G 把这八个信息指纹映射到 1 到十六亿中的八个自然数 g1, g2, …,g8。现在我们把这八个位置的二进制全部设置为一。当我们对这一亿个 email 地址都进行这样的处理后。一个针对这些 email 地址的布隆过滤器就建成了。</li>
+<li>网络爬虫：URL去重</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/算法/" rel="tag"># 算法</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/20/VPS搭建自己的的Hexo博客/" rel="next" title="VPS搭建自己的的Hexo博客">
+                <i class="fa fa-chevron-left"></i> VPS搭建自己的的Hexo博客
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/11/Docker安装/" rel="prev" title="Docker安装">
+                Docker安装 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="zhkui" />
+          <p class="site-author-name" itemprop="name">zhkui</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是布隆过滤器-Bloom-Filter"><span class="nav-number">1.</span> <span class="nav-text">什么是布隆过滤器(Bloom Filter)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本概念"><span class="nav-number">2.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#布隆过滤器原理图解"><span class="nav-number">3.</span> <span class="nav-text">布隆过滤器原理图解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#优点"><span class="nav-number">4.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#缺点"><span class="nav-number">5.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#布隆过滤器的java实现"><span class="nav-number">6.</span> <span class="nav-text">布隆过滤器的java实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#应用场景"><span class="nav-number">7.</span> <span class="nav-text">应用场景</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-zhakui"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhkui</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

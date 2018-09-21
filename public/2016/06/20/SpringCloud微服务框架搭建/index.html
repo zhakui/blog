@@ -1,0 +1,750 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="SpringCloud," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="一、微服务架构1.1什么是分布式不同模块部署在不同服务器上作用：分布式解决网站高并发带来问题 1.2什么是集群多台服务器部署相同应用构成一个集群作用：通过负载均衡设备共同对外提供服务 1.3什么是RPCRPC 的全称是 Remote Procedure Call 是一种进程间通信方式。它允许程序调用另一个地址空间（通常是共享网络的另一台机器上）的过程或函数，而不用程序员显式编码这个远程调用的细节。">
+<meta name="keywords" content="SpringCloud">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringCloud微服务框架搭建">
+<meta property="og:url" content="http://zhkui.com/2016/06/20/SpringCloud微服务框架搭建/index.html">
+<meta property="og:site_name" content="ZhangKui&#x2F;Blog">
+<meta property="og:description" content="一、微服务架构1.1什么是分布式不同模块部署在不同服务器上作用：分布式解决网站高并发带来问题 1.2什么是集群多台服务器部署相同应用构成一个集群作用：通过负载均衡设备共同对外提供服务 1.3什么是RPCRPC 的全称是 Remote Procedure Call 是一种进程间通信方式。它允许程序调用另一个地址空间（通常是共享网络的另一台机器上）的过程或函数，而不用程序员显式编码这个远程调用的细节。">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5548226-692713d14976044d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5548226-8bd98f9a99397bee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5548226-da12e4ba2018f724.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5548226-2fbf1a17cb61fe3a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5548226-f2b5c67fcf1be95f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-05-03T03:12:59.196Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringCloud微服务框架搭建">
+<meta name="twitter:description" content="一、微服务架构1.1什么是分布式不同模块部署在不同服务器上作用：分布式解决网站高并发带来问题 1.2什么是集群多台服务器部署相同应用构成一个集群作用：通过负载均衡设备共同对外提供服务 1.3什么是RPCRPC 的全称是 Remote Procedure Call 是一种进程间通信方式。它允许程序调用另一个地址空间（通常是共享网络的另一台机器上）的过程或函数，而不用程序员显式编码这个远程调用的细节。">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/5548226-692713d14976044d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://zhkui.com/2016/06/20/SpringCloud微服务框架搭建/"/>
+
+
+
+
+
+  <title>SpringCloud微服务框架搭建 | ZhangKui/Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ZhangKui/Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://zhkui.com/2016/06/20/SpringCloud微服务框架搭建/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zhkui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZhangKui/Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SpringCloud微服务框架搭建</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-20T15:05:37+08:00">
+                2016-06-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring-Boot/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring Boot</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="一、微服务架构"><a href="#一、微服务架构" class="headerlink" title="一、微服务架构"></a>一、微服务架构</h1><h2 id="1-1什么是分布式"><a href="#1-1什么是分布式" class="headerlink" title="1.1什么是分布式"></a>1.1什么是分布式</h2><p>不同模块部署在不同服务器上<br>作用：分布式解决网站高并发带来问题</p>
+<h2 id="1-2什么是集群"><a href="#1-2什么是集群" class="headerlink" title="1.2什么是集群"></a>1.2什么是集群</h2><p>多台服务器部署相同应用构成一个集群<br>作用：通过负载均衡设备共同对外提供服务</p>
+<h2 id="1-3什么是RPC"><a href="#1-3什么是RPC" class="headerlink" title="1.3什么是RPC"></a>1.3什么是RPC</h2><p>RPC 的全称是 Remote Procedure Call 是一种进程间通信方式。<br>它允许程序调用另一个地址空间（通常是共享网络的另一台机器上）的过程或函数，而不用程序员显式编码这个远程调用的细节。即无论是调用本地接口/服务的还是远程的接口/服务，本质上编写的调用代码基本相同。<br>比如两台服务器A，B，一个应用部署在A服务器上，想要调用B服务器上应用提供的函数或者方法，由于不在一个内存空间，不能直接调用，这时候需要通过就可以应用RPC框架的实现来解决</p>
+<h3 id="1-3-1restful、soap、rpc"><a href="#1-3-1restful、soap、rpc" class="headerlink" title="1.3.1restful、soap、rpc"></a>1.3.1restful、soap、rpc</h3><p>（1）RESTful是一种架构设计风格，提供了设计原则和约束条件，而不是架构。而满足这些约束条件和原则的应用程序或设计就是 RESTful架构或服务。<br>（2）SOAP，简单对象访问协议是一种数据交换协议规范，<br>是一种轻量的、简单的、基于XML的协议的规范。SOAP协议和HTTP协议一样，都是底层的通信协议，只是请求包的格式不同而已，SOAP包是XML格式的。<br>SOAP的消息是基于xml并封装成了符合http协议，因此，它符合任何路由器、 防火墙或代理服务器的要求。<br>soap可以使用任何语言来完成，只要发送正确的soap请求即可，基于soap的服务可以在任何平台无需修改即可正常使用。<br>（3）RPC就是从一台机器（客户端）上通过参数传递的方式调用另一台机器（服务器）上的一个函数或方法（可以统称为服务）并得到返回的结果。<br>RPC 会隐藏底层的通讯细节（不需要直接处理Socket通讯或Http通讯）<br>RPC 是一个请求响应模型。客户端发起请求，服务器返回响应（类似于Http的工作方式）<br>RPC 在使用形式上像调用本地函数（或方法）一样去调用远程的函数（或方法）。</p>
+<h3 id="1-3-2rpc远程调用框架"><a href="#1-3-2rpc远程调用框架" class="headerlink" title="1.3.2rpc远程调用框架"></a>1.3.2rpc远程调用框架</h3><p>几种比较典型的RPC的实现和调用框架。<br>（1）RMI实现，利用java.rmi包实现，基于Java远程方法协议(Java Remote Method Protocol)<br>和java的原生序列化。<br>（2）Hessian，是一个轻量级的remoting onhttp工具，使用简单的方法提供了RMI的功能。 基于HTTP协议，采用二进制编解码。<br>（3）thrift是一种可伸缩的跨语言服务的软件框架。thrift允许你定义一个描述文件，描述数据类型和服务接口。依据该文件，编译器方便地生成RPC客户端和服务器通信代码。<br>（4）SpringCloud 为开发人员提供了快速构建分布式系统的一些工具，包括配置管理、服务发现、断路器、路由、微代理、事件总线、全局锁、决策竞选、分布式会话等等。</p>
+<h2 id="1-4什么是SOA"><a href="#1-4什么是SOA" class="headerlink" title="1.4什么是SOA"></a>1.4什么是SOA</h2><p>业务系统分解为多个组件，让每个组件都独立提供离散，自治，可复用的服务能力<br>通过服务的组合和编排来实现上层的业务流程<br>作用：简化维护,降低整体风险,伸缩灵活</p>
+<h2 id="1-5什么是微服务"><a href="#1-5什么是微服务" class="headerlink" title="1.5什么是微服务"></a>1.5什么是微服务</h2><p>架构设计概念,各服务间隔离（分布式也是隔离）,自治（分布式依赖整体组合）其它特性(单一职责,边界,异步通信,独立部署)是分布式概念的跟严格执行<br> SOA到微服务架构的演进过程<br> 作用：各服务可独立应用，组合服务也可系统应用(巨石应用[monolith]的简化实现策略-平台思想)</p>
+<h2 id="1-6使用RPC-http技术实现会员与订单系统通讯"><a href="#1-6使用RPC-http技术实现会员与订单系统通讯" class="headerlink" title="1.6使用RPC http技术实现会员与订单系统通讯"></a>1.6使用RPC http技术实现会员与订单系统通讯</h2><h1 id="二、SpringCloud"><a href="#二、SpringCloud" class="headerlink" title="二、SpringCloud"></a>二、SpringCloud</h1><p>SpringCloud 为开发人员提供了快速构建分布式系统的一些工具，包括配置管理、服务发现、断路器、路由、微代理、事件总线、全局锁、决策竞选、分布式会话等等。它运行环境简单，可以在开发人员的电脑上跑。</p>
+<h2 id="2-1、服务提供者与消费关系"><a href="#2-1、服务提供者与消费关系" class="headerlink" title="2.1、服务提供者与消费关系"></a>2.1、服务提供者与消费关系</h2><p>服务提供者:提供服务被人调用<br>消费者:调用被人服务</p>
+<h2 id="2-2、服务的注册与发现-Eureka"><a href="#2-2、服务的注册与发现-Eureka" class="headerlink" title="2.2、服务的注册与发现(Eureka )"></a>2.2、服务的注册与发现(Eureka )</h2><p>在这里，我们需要用的的组件上Spring Cloud Netflix的Eureka ,eureka是一个服务注册和发现模块。<br>  1 服务注册<br>  2 创建eurekaserver项目<br>  3 引入maven依赖</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5548226-692713d14976044d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="代码结构"></p>
+<p>以上是springcloud项目，eureka是注册中心，zuul是注册网关，ribbon和feign都是cloud的rpc远程调用。<br>zuul主要是用来配置网关<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line">&lt;parent&gt;</div><div class="line">        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</div><div class="line">        &lt;version&gt;1.5.2.RELEASE&lt;/version&gt;</div><div class="line">        &lt;relativePath /&gt; &lt;!-- lookup parent from repository --&gt;</div><div class="line">    &lt;/parent&gt;</div><div class="line">    &lt;properties&gt;</div><div class="line">        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</div><div class="line">        &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;</div><div class="line">        &lt;java.version&gt;1.8&lt;/java.version&gt;</div><div class="line">    &lt;/properties&gt;</div><div class="line"></div><div class="line">    &lt;dependencies&gt;</div><div class="line">        &lt;!--eureka server --&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;spring-cloud-starter-eureka-server&lt;/artifactId&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">        &lt;!-- spring boot test --&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;</div><div class="line">            &lt;scope&gt;test&lt;/scope&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">    &lt;/dependencies&gt;</div><div class="line">    &lt;dependencyManagement&gt;</div><div class="line">        &lt;dependencies&gt;</div><div class="line">            &lt;dependency&gt;</div><div class="line">                &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">                &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;</div><div class="line">                &lt;version&gt;Dalston.RC1&lt;/version&gt;</div><div class="line">                &lt;type&gt;pom&lt;/type&gt;</div><div class="line">                &lt;scope&gt;import&lt;/scope&gt;</div><div class="line">            &lt;/dependency&gt;</div><div class="line">        &lt;/dependencies&gt;</div><div class="line">    &lt;/dependencyManagement&gt;</div><div class="line">    &lt;build&gt;</div><div class="line">        &lt;plugins&gt;</div><div class="line">            &lt;plugin&gt;</div><div class="line">                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;</div><div class="line">            &lt;/plugin&gt;</div><div class="line">        &lt;/plugins&gt;</div><div class="line">    &lt;/build&gt;</div><div class="line">    &lt;repositories&gt;</div><div class="line">        &lt;repository&gt;</div><div class="line">            &lt;id&gt;spring-milestones&lt;/id&gt;</div><div class="line">            &lt;name&gt;Spring Milestones&lt;/name&gt;</div><div class="line">            &lt;url&gt;https://repo.spring.io/milestone&lt;/url&gt;</div><div class="line">            &lt;snapshots&gt;</div><div class="line">                &lt;enabled&gt;false&lt;/enabled&gt;</div><div class="line">            &lt;/snapshots&gt;</div><div class="line">        &lt;/repository&gt;</div><div class="line">    &lt;/repositories&gt;</div></pre></td></tr></table></figure></p>
+<p> 4 配置application.yml<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">server:</div><div class="line">  port: 8761</div><div class="line">eureka:</div><div class="line">  instance:</div><div class="line">    hostname: localhost</div><div class="line">  client:</div><div class="line">    registerWithEureka: false</div><div class="line">    fetchRegistry: false</div><div class="line">    serviceUrl:</div><div class="line">      defaultZone: http://$&#123;eureka.instance.hostname&#125;:$&#123;server.port&#125;/eureka/</div></pre></td></tr></table></figure></p>
+<p> 5 启动EurekaServer<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">@SpringBootApplication</div><div class="line">@EnableEurekaServer</div><div class="line">public class EurekaServerApplication &#123;</div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">       SpringApplication.run(EurekaServerApplication.class, args);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>eureka.client.registerWithEureka=true #是否将自身注册<br>eureka.client.fetchRegistry=false #如果为true，启动时报警.</p>
+<p> 6 打开eureka server 界面的</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5548226-8bd98f9a99397bee.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="eureka server 界面"></p>
+<h2 id="2-3、服务提供者"><a href="#2-3、服务提供者" class="headerlink" title="2.3、服务提供者"></a>2.3、服务提供者</h2><p>创建一个服务提供者 (eureka client),当client向server注册时，它会提供一些元数据，例如主机和端口，URL，主页等。Eureka server 从每个client实例接收心跳消息。 如果心跳超时，则通常将该实例从注册server中删除。</p>
+<p> 1 创建项目eurekaclient<br> 2 引入maven依赖<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line">&lt;parent&gt;</div><div class="line">        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</div><div class="line">        &lt;version&gt;1.5.2.RELEASE&lt;/version&gt;</div><div class="line">        &lt;relativePath /&gt; &lt;!-- lookup parent from repository --&gt;</div><div class="line">    &lt;/parent&gt;</div><div class="line">    &lt;properties&gt;</div><div class="line">        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</div><div class="line">        &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;</div><div class="line">        &lt;java.version&gt;1.8&lt;/java.version&gt;</div><div class="line">    &lt;/properties&gt;</div><div class="line">    &lt;dependencies&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;spring-cloud-starter-eureka&lt;/artifactId&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;</div><div class="line">            &lt;scope&gt;test&lt;/scope&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">    &lt;/dependencies&gt;</div><div class="line">    &lt;dependencyManagement&gt;</div><div class="line">        &lt;dependencies&gt;</div><div class="line">            &lt;dependency&gt;</div><div class="line">                &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">                &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;</div><div class="line">                &lt;version&gt;Dalston.RC1&lt;/version&gt;</div><div class="line">                &lt;type&gt;pom&lt;/type&gt;</div><div class="line">                &lt;scope&gt;import&lt;/scope&gt;</div><div class="line">            &lt;/dependency&gt;</div><div class="line">        &lt;/dependencies&gt;</div><div class="line">    &lt;/dependencyManagement&gt;</div><div class="line">    &lt;build&gt;</div><div class="line">        &lt;plugins&gt;</div><div class="line">            &lt;plugin&gt;</div><div class="line">                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;</div><div class="line">            &lt;/plugin&gt;</div><div class="line">        &lt;/plugins&gt;</div><div class="line">    &lt;/build&gt;</div><div class="line">    &lt;repositories&gt;</div><div class="line">        &lt;repository&gt;</div><div class="line">            &lt;id&gt;spring-milestones&lt;/id&gt;</div><div class="line">            &lt;name&gt;Spring Milestones&lt;/name&gt;</div><div class="line">            &lt;url&gt;https://repo.spring.io/milestone&lt;/url&gt;</div><div class="line">            &lt;snapshots&gt;</div><div class="line">                &lt;enabled&gt;false&lt;/enabled&gt;</div><div class="line">            &lt;/snapshots&gt;</div><div class="line">        &lt;/repository&gt;</div><div class="line">    &lt;/repositories&gt;</div></pre></td></tr></table></figure></p>
+<p> 3 application.yml配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">eureka:</div><div class="line">  client:</div><div class="line">    serviceUrl:</div><div class="line">      defaultZone: http://localhost:8761/eureka/</div><div class="line">server:</div><div class="line">  port: 8762</div><div class="line">spring:</div><div class="line">  application:</div><div class="line">    name: service-hi</div></pre></td></tr></table></figure></p>
+<p> 4 发布服务<br>通过注解@EnableEurekaClient 表明自己是一个eurekaclient.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">@SpringBootApplication</div><div class="line">@EnableEurekaClient</div><div class="line">@RestController</div><div class="line">public class ServiceHiApplication &#123;</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        SpringApplication.run(ServiceHiApplication.class, args);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Value(&quot;$&#123;server.port&#125;&quot;)</div><div class="line">    String port;</div><div class="line"></div><div class="line">    @RequestMapping(&quot;/hi&quot;)</div><div class="line">    public String home(@RequestParam String name) &#123;</div><div class="line">        return &quot;hi &quot; + name + &quot;,i am from port:&quot; + port;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p> 5 演示效果<br>需要指明spring.application.name,这个很重要，这在以后的服务与服务之间相互调用一般都是根据这个name 。 启动工程，打开<a href="http://localhost:8761" target="_blank" rel="external">http://localhost:8761</a> ，即eureka server 的网址：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5548226-da12e4ba2018f724.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="eureka server 界面"></p>
+<p>你会发现一个服务已经注册在服务中了，服务名为SERVICE-HI ,端口为7862<br>这时打开 <a href="http://localhost:8762/hi?name=forezp" target="_blank" rel="external">http://localhost:8762/hi?name=forezp</a> ，你会在浏览器上看到 :<br>hi forezp,i am from port:8762</p>
+<h2 id="2-4、服务消费者（Feign）"><a href="#2-4、服务消费者（Feign）" class="headerlink" title="2.4、服务消费者（Feign）"></a>2.4、服务消费者（Feign）</h2><p>什么是Feign<br>Feign是一个声明式的伪Http客户端，它使得写Http客户端变得更简单。使用Feign，只需要创建一个接口并注解。<br>它具有可插拔的注解特性，可使用Feign 注解和JAX-RS注解。Feign支持可插拔的编码器和解码器。<br>Feign默认集成了Ribbon，并和Eureka结合，默认实现了负载均衡的效果。<br>简而言之：<br>Feign 采用的是基于接口的注解<br>Feign 整合了ribbon<br> 准备工作<br>继续用上一节的工程， 启动eureka-server，端口为8761; 启动service-hi 两次，端口分别为8762 、8773.<br> 准备工创建一个feign的服务<br> 1 新建一个spring-boot工程，取名为serice-feign，在它的pom文件引入Feign的起步依赖spring-cloud-starter-feign、Eureka的起步依赖<br>spring-cloud-starter-eureka、Web的起步依赖spring-boot-starter-web，代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line">&lt;parent&gt;</div><div class="line">        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</div><div class="line">        &lt;version&gt;1.5.2.RELEASE&lt;/version&gt;</div><div class="line">        &lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;</div><div class="line">    &lt;/parent&gt;</div><div class="line"></div><div class="line">    &lt;properties&gt;</div><div class="line">        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</div><div class="line">        &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;</div><div class="line">        &lt;java.version&gt;1.8&lt;/java.version&gt;</div><div class="line">    &lt;/properties&gt;</div><div class="line"></div><div class="line">    &lt;dependencies&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;spring-cloud-starter-eureka&lt;/artifactId&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;spring-cloud-starter-feign&lt;/artifactId&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line"></div><div class="line">        &lt;dependency&gt;</div><div class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">            &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;</div><div class="line">            &lt;scope&gt;test&lt;/scope&gt;</div><div class="line">        &lt;/dependency&gt;</div><div class="line">    &lt;/dependencies&gt;</div><div class="line"></div><div class="line">    &lt;dependencyManagement&gt;</div><div class="line">        &lt;dependencies&gt;</div><div class="line">            &lt;dependency&gt;</div><div class="line">                &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">                &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;</div><div class="line">                &lt;version&gt;Dalston.RC1&lt;/version&gt;</div><div class="line">                &lt;type&gt;pom&lt;/type&gt;</div><div class="line">                &lt;scope&gt;import&lt;/scope&gt;</div><div class="line">            &lt;/dependency&gt;</div><div class="line">        &lt;/dependencies&gt;</div><div class="line">    &lt;/dependencyManagement&gt;</div><div class="line"></div><div class="line">    &lt;build&gt;</div><div class="line">        &lt;plugins&gt;</div><div class="line">            &lt;plugin&gt;</div><div class="line">                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div><div class="line">                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;</div><div class="line">            &lt;/plugin&gt;</div><div class="line">        &lt;/plugins&gt;</div><div class="line">    &lt;/build&gt;</div><div class="line"></div><div class="line">    &lt;repositories&gt;</div><div class="line">        &lt;repository&gt;</div><div class="line">            &lt;id&gt;spring-milestones&lt;/id&gt;</div><div class="line">            &lt;name&gt;Spring Milestones&lt;/name&gt;</div><div class="line">            &lt;url&gt;https://repo.spring.io/milestone&lt;/url&gt;</div><div class="line">            &lt;snapshots&gt;</div><div class="line">                &lt;enabled&gt;false&lt;/enabled&gt;</div><div class="line">            &lt;/snapshots&gt;</div><div class="line">        &lt;/repository&gt;</div><div class="line">    &lt;/repositories&gt;</div></pre></td></tr></table></figure></p>
+<p> 2 application.yml配置<br>在工程的配置文件application.yml文件，指定程序名为service-feign，端口号为8765，服务注册地址为<a href="http://localhost:8761/eureka/" target="_blank" rel="external">http://localhost:8761/eureka/</a> ，代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">eureka:</div><div class="line">  client:</div><div class="line">    serviceUrl:</div><div class="line">      defaultZone: http://localhost:8761/eureka/</div><div class="line">server:</div><div class="line">  port: 8765</div><div class="line">spring:</div><div class="line">  application:</div><div class="line">    name: service-feign</div></pre></td></tr></table></figure></p>
+<p> 3 定义一个feign接口<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">@FeignClient(value = &quot;service-hi&quot;)</div><div class="line">public interface SchedualServiceHi &#123;</div><div class="line">    @RequestMapping(value = &quot;/hi&quot;, method = RequestMethod.GET)</div><div class="line">    String sayHiFromClientOne(@RequestParam(value = &quot;name&quot;) String name);</div><div class="line">&#125;</div><div class="line"></div><div class="line">一个”/hi”的API接口</div><div class="line">@RestController</div><div class="line">public class HiController &#123;</div><div class="line">    @Autowired</div><div class="line">    SchedualServiceHi schedualServiceHi;</div><div class="line">    @RequestMapping(value = &quot;/hi&quot;,method = RequestMethod.GET)</div><div class="line">    public String sayHi(@RequestParam String name)&#123;</div><div class="line">        return schedualServiceHi.sayHiFromClientOne(name);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">启动方式</div><div class="line">@SpringBootApplication</div><div class="line">@EnableDiscoveryClient</div><div class="line">@EnableFeignClients</div><div class="line">public class SericeFeign &#123;</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        SpringApplication.run(SericeFeign.class, args);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p> 4 演示效果<br>启动程序，多次访问<a href="http://localhost:8765/hi?name=forezp(http://localhost:8765/hi?name=forezp),浏览器交替显示：" target="_blank" rel="external">http://localhost:8765/hi?name=forezp(http://localhost:8765/hi?name=forezp),浏览器交替显示：</a></p>
+<p>hi forezp,i am from port:8762</p>
+<p>hi forezp,i am from port:8763</p>
+<h2 id="2-5、Hystrix断路器"><a href="#2-5、Hystrix断路器" class="headerlink" title="2.5、Hystrix断路器"></a>2.5、Hystrix断路器</h2><p>在微服务架构中，根据业务来拆分成一个个的服务，服务与服务之间可以相互调用（RPC），在Spring Cloud可以用RestTemplate+Ribbon和Feign来调用。为了保证其高可用，单个服务通常会集群部署。由于网络原因或者自身的原因，服务并不能保证100%可用，如果单个服务出现问题，调用这个服务就会出现线程阻塞，此时若有大量的请求涌入，Servlet容器的线程资源会被消耗完毕，导致服务瘫痪。服务与服务之间的依赖性，故障会传播，会对整个微服务系统造成灾难性的严重后果，这就是服务故障的“雪崩”效应。<br>为了解决这个问题，业界提出了断路器模型。</p>
+<h3 id="2-5-1、什么是Hystrix"><a href="#2-5-1、什么是Hystrix" class="headerlink" title="2.5.1、什么是Hystrix"></a>2.5.1、什么是Hystrix</h3><p>Netflix开源了Hystrix组件，实现了断路器模式，SpringCloud对这一组件进行了整合。 在微服务架构中，一个请求需要调用多个服务是非常常见的，如下图：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5548226-2fbf1a17cb61fe3a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="eureka server 界面"></p>
+<p>较底层的服务如果出现故障，会导致连锁故障。当对特定的服务的调用的不可用达到一个阀值（Hystric 是5秒20次） 断路器将会被打开。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5548226-f2b5c67fcf1be95f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="eureka server 界面"></p>
+<p>断路打开后，可用避免连锁故障，fallback方法可以直接返回一个固定值。<br>准备工作<br>这篇文章基于上一篇文章的工程，首先启动上一篇文章的工程，启动eureka-server 工程；启动service-hi工程，它的端口为8762。<br> 1 在ribbon使用断路器<br>改造serice-ribbon 工程的代码，首先在pox.xml文件中加入spring-cloud-starter-hystrix的起步依赖：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-cloud-starter-hystrix&lt;/artifactId&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure></p>
+<p> 2 改造service<br>改造HelloService类，在hiService方法上加上@HystrixCommand注解。该注解对该方法创建了熔断器的功能，并指定了fallbackMethod熔断方法，熔断方法直接返回了一个字符串，字符串为”hi,”+name+”,sorry,error!”，代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">@Service</div><div class="line">public class HelloService &#123;</div><div class="line"></div><div class="line">    @Autowired</div><div class="line">    RestTemplate restTemplate;</div><div class="line"></div><div class="line">    @HystrixCommand(fallbackMethod = &quot;hiError&quot;)</div><div class="line">    public String hiService(String name) &#123;</div><div class="line">        return restTemplate.getForObject(&quot;http://SERVICE-HI/hi?name=&quot; + name, String.class);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public String hiError(String name) &#123;</div><div class="line">        return &quot;hi,&quot; + name + &quot;,sorry,error!&quot;;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p> 3 在启动类上加入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">@SpringBootApplication</div><div class="line">@EnableEurekaClient</div><div class="line">@EnableHystrix   //断路器</div><div class="line">public class App &#123;</div><div class="line"></div><div class="line">    public static void main(String[] args) &#123;</div><div class="line">        SpringApplication.run(App.class, args);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Bean</div><div class="line">    @LoadBalanced</div><div class="line">    RestTemplate restTemplate() &#123;</div><div class="line">        return new RestTemplate();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SpringCloud/" rel="tag"># SpringCloud</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/06/20/JavaScript继承方式/" rel="next" title="JavaScript继承方式">
+                <i class="fa fa-chevron-left"></i> JavaScript继承方式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/20/VPS搭建自己的的Hexo博客/" rel="prev" title="VPS搭建自己的的Hexo博客">
+                VPS搭建自己的的Hexo博客 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="zhkui" />
+          <p class="site-author-name" itemprop="name">zhkui</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、微服务架构"><span class="nav-number">1.</span> <span class="nav-text">一、微服务架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1什么是分布式"><span class="nav-number">1.1.</span> <span class="nav-text">1.1什么是分布式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2什么是集群"><span class="nav-number">1.2.</span> <span class="nav-text">1.2什么是集群</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3什么是RPC"><span class="nav-number">1.3.</span> <span class="nav-text">1.3什么是RPC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-1restful、soap、rpc"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.3.1restful、soap、rpc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-2rpc远程调用框架"><span class="nav-number">1.3.2.</span> <span class="nav-text">1.3.2rpc远程调用框架</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4什么是SOA"><span class="nav-number">1.4.</span> <span class="nav-text">1.4什么是SOA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5什么是微服务"><span class="nav-number">1.5.</span> <span class="nav-text">1.5什么是微服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6使用RPC-http技术实现会员与订单系统通讯"><span class="nav-number">1.6.</span> <span class="nav-text">1.6使用RPC http技术实现会员与订单系统通讯</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、SpringCloud"><span class="nav-number">2.</span> <span class="nav-text">二、SpringCloud</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1、服务提供者与消费关系"><span class="nav-number">2.1.</span> <span class="nav-text">2.1、服务提供者与消费关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2、服务的注册与发现-Eureka"><span class="nav-number">2.2.</span> <span class="nav-text">2.2、服务的注册与发现(Eureka )</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3、服务提供者"><span class="nav-number">2.3.</span> <span class="nav-text">2.3、服务提供者</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4、服务消费者（Feign）"><span class="nav-number">2.4.</span> <span class="nav-text">2.4、服务消费者（Feign）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5、Hystrix断路器"><span class="nav-number">2.5.</span> <span class="nav-text">2.5、Hystrix断路器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-1、什么是Hystrix"><span class="nav-number">2.5.1.</span> <span class="nav-text">2.5.1、什么是Hystrix</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-zhakui"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhkui</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
