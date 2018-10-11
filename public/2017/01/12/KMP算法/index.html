@@ -74,7 +74,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Technology,Server,Rides," />
+  <meta name="keywords" content="算法," />
 
 
 
@@ -90,17 +90,17 @@
 
 
 
-<meta name="description" content="在上文Redis的数据结构(一)中，我们了解了Redis的两种数据类型(String和Hash)，这篇文章我们将继续了解其他几种数据类型。在Redis中总共有5中数据类型：  String——字符串 Hash——字典 List——列表 Set——集合 Sorted Set——有序集合  1. List——列表一般意义上讲，列表就是有序元素的序列：10,20,1,2,3就是一个列表。但用数组实现的">
-<meta name="keywords" content="Technology,Server,Rides">
+<meta name="description" content="什么是KMP算法  KMP算法是其实就是一种字符串匹配算法（字符串中宣召匹配的子串），由D.E.Knuth、J.H.Morris和V.R.Pratt同时发现的。 KMP算法的思想  假设现在有字符串A.那么我们需要在A中找到是否包含字符串B，如果存在就返回起始位置。  A:ABCDABCABCDEABCEABDE  B:ABCDEA串中出现了两次B串：ABCDABCABCDEABCEABDE传统方">
+<meta name="keywords" content="算法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Redis的数据结构（二）">
-<meta property="og:url" content="http://zhkui.com/2013/05/16/Redis的数据结构（二）/index.html">
+<meta property="og:title" content="KMP算法">
+<meta property="og:url" content="http://zhkui.com/2017/01/12/KMP算法/index.html">
 <meta property="og:site_name" content="ZhangKui&#x2F;Blog">
-<meta property="og:description" content="在上文Redis的数据结构(一)中，我们了解了Redis的两种数据类型(String和Hash)，这篇文章我们将继续了解其他几种数据类型。在Redis中总共有5中数据类型：  String——字符串 Hash——字典 List——列表 Set——集合 Sorted Set——有序集合  1. List——列表一般意义上讲，列表就是有序元素的序列：10,20,1,2,3就是一个列表。但用数组实现的">
-<meta property="og:updated_time" content="2017-09-08T10:18:46.047Z">
+<meta property="og:description" content="什么是KMP算法  KMP算法是其实就是一种字符串匹配算法（字符串中宣召匹配的子串），由D.E.Knuth、J.H.Morris和V.R.Pratt同时发现的。 KMP算法的思想  假设现在有字符串A.那么我们需要在A中找到是否包含字符串B，如果存在就返回起始位置。  A:ABCDABCABCDEABCEABDE  B:ABCDEA串中出现了两次B串：ABCDABCABCDEABCEABDE传统方">
+<meta property="og:updated_time" content="2018-06-08T08:16:56.650Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Redis的数据结构（二）">
-<meta name="twitter:description" content="在上文Redis的数据结构(一)中，我们了解了Redis的两种数据类型(String和Hash)，这篇文章我们将继续了解其他几种数据类型。在Redis中总共有5中数据类型：  String——字符串 Hash——字典 List——列表 Set——集合 Sorted Set——有序集合  1. List——列表一般意义上讲，列表就是有序元素的序列：10,20,1,2,3就是一个列表。但用数组实现的">
+<meta name="twitter:title" content="KMP算法">
+<meta name="twitter:description" content="什么是KMP算法  KMP算法是其实就是一种字符串匹配算法（字符串中宣召匹配的子串），由D.E.Knuth、J.H.Morris和V.R.Pratt同时发现的。 KMP算法的思想  假设现在有字符串A.那么我们需要在A中找到是否包含字符串B，如果存在就返回起始位置。  A:ABCDABCABCDEABCEABDE  B:ABCDEA串中出现了两次B串：ABCDABCABCDEABCEABDE传统方">
 
 
 
@@ -128,13 +128,13 @@
 
 
 
-  <link rel="canonical" href="http://zhkui.com/2013/05/16/Redis的数据结构（二）/"/>
+  <link rel="canonical" href="http://zhkui.com/2017/01/12/KMP算法/"/>
 
 
 
 
 
-  <title>Redis的数据结构（二） | ZhangKui/Blog</title>
+  <title>KMP算法 | ZhangKui/Blog</title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -264,7 +264,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://zhkui.com/2013/05/16/Redis的数据结构（二）/">
+    <link itemprop="mainEntityOfPage" href="http://zhkui.com/2017/01/12/KMP算法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zhkui">
@@ -281,7 +281,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Redis的数据结构（二）</h1>
+          <h1 class="post-title" itemprop="name headline">KMP算法</h1>
         
 
         <div class="post-meta">
@@ -293,8 +293,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-05-16T09:58:37+08:00">
-                2013-05-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-12T15:25:37+08:00">
+                2017-01-12
               </time>
             
 
@@ -316,8 +316,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Server/" itemprop="url" rel="index">
-                    <span itemprop="name">Server</span>
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
                   </a>
                 </span>
 
@@ -350,26 +350,8 @@
       
 
       
-        <hr>
-<p>在上文<a href="http://zhkui.com/2017/05/15/Redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">Redis的数据结构(一)</a>中，我们了解了Redis的两种数据类型(String和Hash)，这篇文章我们将继续了解其他几种数据类型。在Redis中总共有5中数据类型：</p>
-<ul>
-<li>String——字符串</li>
-<li>Hash——字典</li>
-<li>List——列表</li>
-<li>Set——集合</li>
-<li>Sorted Set——有序集合</li>
-</ul>
-<h1 id="1-List——列表"><a href="#1-List——列表" class="headerlink" title="1. List——列表"></a>1. List——列表</h1><p>一般意义上讲，列表就是有序元素的序列：10,20,1,2,3就是一个列表。但用数组实现的List和用Linked List实现的List，在属性方面大不相同。<br>Redis lists基于Linked Lists实现。这意味着即使在一个list中有数百万个元素，在头部或尾部添加一个元素的操作，其时间复杂度也是常数级别的。用LPUSH命令在十个元素的list头部添加新元素，和在千万元素list头部添加新元素的速度相同。那么，坏消息是什么？在数组实现的list中利用索引访问元素的速度极快，而同样的操作在linked list实现的list上没有那么快。<br>Redis Lists用linked list实现的原因是：对于数据库系统来说，至关重要的特性是：能非常快的在很大的列表上添加元素。另一个重要因素是，正如你将要看到的：Redis lists能在常数时间取得常数长度。</p>
-<p>LPUSH 命令可向list的左边（头部）添加一个新元素，而RPUSH命令可向list的右边（尾部）添加一个新元素。最后LRANGE 命令可从list中取出一定范围的元素<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">$ redis-cli rpush messages <span class="string">"Hello"</span></div><div class="line">OK</div><div class="line">$ redis-cli rpush messages <span class="string">"Redis：hello"</span></div><div class="line">OK</div><div class="line">$ redis-cli rpush messages <span class="string">"I'm a NOSQL"</span></div><div class="line">OK</div><div class="line">$ redis-cli lrange messages 0 2</div><div class="line">1. Hello</div><div class="line">2. Redis：hello</div><div class="line">3. I<span class="string">'m a NOSQL</span></div></pre></td></tr></table></figure></p>
-<p>注意LRANGE 带有两个索引，一定范围的第一个和最后一个元素。这两个索引都可以为负来告知Redis从尾部开始计数，因此-1表示最后一个元素，-2表示list中的倒数第二个元素，以此类推。<br>正如你可以从上面的例子中猜到的，list可被用来实现聊天系统。还可以作为不同进程间传递消息的队列。关键是，你可以每次都以原先添加的顺序访问数据。这不需要任何SQL ORDER BY 操作，将会非常快，也会很容易扩展到百万级别元素的规模。</p>
-<p>在上面的例子里 ，我们将“对象”（此例中是简单消息）直接压入Redis list，但通常不应这么做，由于对象可能被多次引用：例如在一个list中维护其时间顺序，在一个集合中保存它的类别，只要有必要，它还会出现在其他list中，等等。<br>例如我们有一个新闻列表，我们将用户提交的链接（新闻）添加到list中，可以用下面的方法：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ redis-cli incr next.news.id</div><div class="line">(<span class="built_in">integer</span>) 1</div><div class="line">$ redis-cli <span class="built_in">set</span> news:1:title <span class="string">"Redis的数据结构(一)"</span></div><div class="line">OK</div><div class="line">$ redis-cli <span class="built_in">set</span> news:1:url <span class="string">"http://zhkui.com/2017/05/15/Redis%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"</span></div><div class="line">OK</div><div class="line">$ redis-cli lpush submitted.news 1</div><div class="line">OK</div></pre></td></tr></table></figure></p>
-<p>我们自增一个key，很容易得到一个独一无二的自增ID，然后通过此ID创建对象–为对象的每个字段设置一个key。最后将新对象的ID压入submitted.news list。<br>在命令参考文档中还可以读到所有和list有关的命令。你可以删除元素，旋转list，根据索引获取和设置元素，当然也可以用LLEN得到list的长度。</p>
-<h1 id="2-Set–集合"><a href="#2-Set–集合" class="headerlink" title="2. Set–集合"></a>2. Set–集合</h1><p>Redis集合是未排序的集合，其元素是二进制安全的字符串。SADD命令可以向集合添加一个新元素。和sets相关的操作也有许多，比如检测某个元素是否存在，以及实现交集，并集，差集等等。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">$ redis-cli sadd set 1</div><div class="line">(integer) 1</div><div class="line">$ redis-cli sadd set 2</div><div class="line">(integer) 1</div><div class="line">$ redis-cli sadd set 3</div><div class="line">(integer) 1</div><div class="line">$ redis-cli smembers set</div><div class="line">1. 3</div><div class="line">2. 1</div><div class="line">3. 2</div></pre></td></tr></table></figure></p>
-<h1 id="3-Sorted-Set–有序集合"><a href="#3-Sorted-Set–有序集合" class="headerlink" title="3. Sorted Set–有序集合"></a>3. Sorted Set–有序集合</h1><p>和Sets相比，Sorted Sets是将 Set 中的元素增加了一个权重参数 score，使得集合中的元素能够按 score 进行有序排列，比如一个存储全班同学成绩的 Sorted Sets，其集合 value 可以是同学的学号，而 score 就可以是其考试得分，这样在数据插入集合的时候，就已经进行了天然的排序。另外还可以用 Sorted Sets 来做带权重的队列，比如普通消息的 score 为1，重要消息的 score 为2，然后工作线程可以选择按 score 的倒序来获取工作任务。让重要的任务优先执行。</p>
-<ol>
-<li>带有权重的元素，比如一个游戏的用户得分排行榜</li>
-<li>比较复杂的数据结构，一般用到的场景不算太多</li>
-</ol>
+        <h1 id="什么是KMP算法"><a href="#什么是KMP算法" class="headerlink" title="什么是KMP算法"></a>什么是KMP算法</h1><p>  KMP算法是其实就是一种字符串匹配算法（字符串中宣召匹配的子串），由D.E.Knuth、J.H.Morris和V.R.Pratt同时发现的。</p>
+<h1 id="KMP算法的思想"><a href="#KMP算法的思想" class="headerlink" title="KMP算法的思想"></a>KMP算法的思想</h1><p>  假设现在有字符串A.那么我们需要在A中找到是否包含字符串B，如果存在就返回起始位置。<br>  A:ABCDABCABCDEABCEABDE<br>  B:ABCDE<br>A串中出现了两次B串：<br>ABCDABC<font color="#ff0000">ABCDE</font>ABCEABDE<br>传统方法是，从左到右一个字符一个字符的比较，当遇到不匹配的字符就回到上次开始匹配的下一位继续匹配。<br>下面给出一段暴力搜索的代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">General</span></span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</div><div class="line">        String txt = <span class="string">"ABCDABCABCDEABCEABDE"</span>;</div><div class="line">        String pat = <span class="string">"ABCDE"</span>;</div><div class="line">        <span class="keyword">int</span> a = search(pat, txt);</div><div class="line">        <span class="keyword">if</span> (a == txt.length())&#123;</div><div class="line">            System.out.println(<span class="string">"Not Found!"</span>);</div><div class="line">        &#125;<span class="keyword">else</span>&#123;</div><div class="line">            System.out.println(<span class="string">"Found: "</span> + a);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">search</span><span class="params">(String pat, String txt)</span></span>&#123;</div><div class="line">        <span class="keyword">int</span> M = pat.length();</div><div class="line">        <span class="keyword">int</span> N = txt.length();</div><div class="line"></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= N - M; i++)&#123;</div><div class="line">            <span class="keyword">int</span> j;</div><div class="line">            <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; M; j++)&#123;</div><div class="line">                <span class="keyword">if</span> (txt.charAt(i+j) != pat.charAt(j))&#123;</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (j == M) <span class="keyword">return</span> i;<span class="comment">//Found</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> N;<span class="comment">//Not Found</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -399,11 +381,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Technology/" rel="tag"># Technology</a>
-          
-            <a href="/tags/Server/" rel="tag"># Server</a>
-          
-            <a href="/tags/Rides/" rel="tag"># Rides</a>
+            <a href="/tags/算法/" rel="tag"># 算法</a>
           
         </div>
       
@@ -416,8 +394,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2013/05/15/Redis的数据结构/" rel="next" title="Redis的数据结构（一）">
-                <i class="fa fa-chevron-left"></i> Redis的数据结构（一）
+              <a href="/2017/01/11/大数据排重算法：布隆过滤器/" rel="next" title="大数据排重算法：布隆过滤器">
+                <i class="fa fa-chevron-left"></i> 大数据排重算法：布隆过滤器
               </a>
             
           </div>
@@ -426,8 +404,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2013/06/20/JavaScript继承方式/" rel="prev" title="JavaScript继承方式">
-                JavaScript继承方式 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/06/11/Docker安装/" rel="prev" title="Docker安装">
+                Docker安装 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -557,7 +535,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-List——列表"><span class="nav-number">1.</span> <span class="nav-text">1. List——列表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Set–集合"><span class="nav-number">2.</span> <span class="nav-text">2. Set–集合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Sorted-Set–有序集合"><span class="nav-number">3.</span> <span class="nav-text">3. Sorted Set–有序集合</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是KMP算法"><span class="nav-number">1.</span> <span class="nav-text">什么是KMP算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#KMP算法的思想"><span class="nav-number">2.</span> <span class="nav-text">KMP算法的思想</span></a></li></ol></div>
             
 
           </div>
