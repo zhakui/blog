@@ -1,0 +1,789 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Golang,Go," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="This article was transferred from @teivah Original Recently, I was asked to detail what makes a good code or a bad code in Golang. I found this exercice very interesting. Actually, interesting enough">
+<meta name="keywords" content="Golang,Go">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Good Code vs Bad Code in Golang">
+<meta property="og:url" content="http://zhkui.com/2018/11/16/Good-Code-vs-Bad-Code-in-Golang/index.html">
+<meta property="og:site_name" content="ZhangKui&#x2F;Blog">
+<meta property="og:description" content="This article was transferred from @teivah Original Recently, I was asked to detail what makes a good code or a bad code in Golang. I found this exercice very interesting. Actually, interesting enough">
+<meta property="og:image" content="http://zhkui.com/2018/11/16/Good-Code-vs-Bad-Code-in-Golang/1-yh90bW8jL4f8pOTZTvbzqw.png">
+<meta property="og:updated_time" content="2018-11-16T09:42:47.205Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Good Code vs Bad Code in Golang">
+<meta name="twitter:description" content="This article was transferred from @teivah Original Recently, I was asked to detail what makes a good code or a bad code in Golang. I found this exercice very interesting. Actually, interesting enough">
+<meta name="twitter:image" content="http://zhkui.com/2018/11/16/Good-Code-vs-Bad-Code-in-Golang/1-yh90bW8jL4f8pOTZTvbzqw.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://zhkui.com/2018/11/16/Good-Code-vs-Bad-Code-in-Golang/"/>
+
+
+
+
+
+  <title>Good Code vs Bad Code in Golang | ZhangKui/Blog</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ZhangKui/Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://zhkui.com/2018/11/16/Good-Code-vs-Bad-Code-in-Golang/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zhkui">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ZhangKui/Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Good Code vs Bad Code in Golang</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-16T14:53:57+08:00">
+                2018-11-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Golang/" itemprop="url" rel="index">
+                    <span itemprop="name">Golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>This article was transferred from @teivah</code> <a href="https://medium.com/@teivah/good-code-vs-bad-code-in-golang-84cb3c5da49d" target="_blank" rel="external">Original</a><br><img src="./1-yh90bW8jL4f8pOTZTvbzqw.png" alt=""></p>
+<p>Recently, I was asked to detail what makes a good code or a bad code in Golang. I found this exercice very interesting. Actually, interesting enough to write a post about that. To illustrate my answer, I have taken a concrete use cases I faced in the Air Traffic Management (ATM) domain. The project is available in <a href="https://github.com/teivah/golang-good-code-bad-code" target="_blank" rel="external">Github</a>.</p>
+<h1 id="Context"><a href="#Context" class="headerlink" title="Context"></a>Context</h1><p>First, few words to explain the context of the implementation.<br>Eurocontrol is the organization managing the air traffic across Europe countries. The common network for exchanging data between Eurocontrol and an Air Navigation Service Provider (ANSP) is called AFTN. This network is mainly used to exchange two different message types: ADEXP and ICAO messages. Each message type has its own syntax but in terms of semantic, both types are equivalent (more or less). Given the context, performance must be a key element for the implementation.<br>This project has to provide two implementations for parsing ADEXP messages (ICAO is not managed in the frame of this exercise) based on Go:</p>
+<ul>
+<li>A bad implementation (package name: <a href="https://github.com/teivah/golang-good-code-bad-code/tree/master/bad" target="_blank" rel="external">bad</a>)</li>
+<li>A refactored implementation (package name: <a href="https://github.com/teivah/golang-good-code-bad-code/tree/master/good" target="_blank" rel="external">good</a>).<br>An example of an ADEXP message can be found <a href="https://raw.githubusercontent.com/teivah/golang-good-code-bad-code/master/resources/tests/adexp.txt" target="_blank" rel="external">here</a>.<br>In the frame of this exercise, the parsers handle only a subset of the fields we can find in an ADEXP message. Yet, It is still relevant to illustrate common Go mistakes.</li>
+</ul>
+<h1 id="Parsing"><a href="#Parsing" class="headerlink" title="Parsing"></a>Parsing</h1><p>In a nutshell, an ADEXP message is a set of tokens. A token type can be either:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">-ARCID ACA878</div></pre></td></tr></table></figure></p>
+<p>Meaning the ARCID (aircraft identifier) is ACA878.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">-EETFIR EHAA 0853</div><div class="line">-EETFIR EBBU 0908</div></pre></td></tr></table></figure></p>
+<p>This example is a list of FIR (Flight Information Region). The first FIR is EHAA 0853 whereas the second one is EBBU 0908.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">-GEO -GEOID GEO01 -LATTD 490000N -LONGTD 0500000W</div><div class="line">-GEO -GEOID GEO02 -LATTD 500000N -LONGTD 0400000W</div></pre></td></tr></table></figure></p>
+<p>A repeating list of tokens. Each line contains a sublist of tokens (in this example GEOID, LATTD, LONGTD).<br>Given the context, it is important to implement a version leveraging parallelization. So the algorithm is the following one:</p>
+<ul>
+<li>A preprocessing step to clean and rearrange the input message (we have to clean the potential white spaces, rearrange the tokens which are multi-lined like COMMENT etc.)</li>
+<li>Then splitting each line in a given goroutine. Each goroutine will be in charge to process one line and to return the result.</li>
+<li>Last but not least, gathering the results and returning a Message structure. This structure is a common one regardless of the message type (ADEXP or ICAO).<br>Each package contains an adexp.go file exposing the main function ParseAdexpMessage().</li>
+</ul>
+<h1 id="Step-by-step-comparison"><a href="#Step-by-step-comparison" class="headerlink" title="Step-by-step comparison"></a>Step-by-step comparison</h1><p>Let’s now see step by step what I consider as a bad code and how I refactored it.</p>
+<h1 id="String-vs-byte"><a href="#String-vs-byte" class="headerlink" title="String vs []byte"></a>String vs []byte</h1><p>The bad implementation handles only string inputs. As Go offers a strong support for bytes operations (basic operation like trim, regexp etc.) and that the input will most likely by a []byte (considering AFTN messages are received through TCP), there’s actually no good reason to force a string input.</p>
+<h1 id="Error-management"><a href="#Error-management" class="headerlink" title="Error management"></a>Error management</h1><p>The error management is kind of terrible the bad implementation.We can find some cases where potential errors returned in the second argument are not even managed:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">preprocessed, _ := preprocess(string)</div></pre></td></tr></table></figure></p>
+<p>The good implementation deals with each potential error:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">preprocessed, err := preprocess(bytes)</div><div class="line">if err != nil &#123;</div><div class="line">  return Message&#123;&#125;, err</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>We can also find some mistakes in the bad implementation like in the following code:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if len(in) == 0 &#123;</div><div class="line">  return &quot;&quot;, fmt.Errorf(&quot;Input is empty&quot;)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>The first mistake is a syntax one. An error string shall neither be capitalized nor end with a punctuation according to Go standards. The second mistake is due to the fact that if an error string is a simple constant (no formatting is required), a call to errors.New() is slightly more performant.<br>The good implementation looks like:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if len(in) == 0 &#123;</div><div class="line">	return nil, errors.New(&quot;input is empty&quot;)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h1 id="Avoid-nesting"><a href="#Avoid-nesting" class="headerlink" title="Avoid nesting"></a>Avoid nesting</h1><p>The mapLine() function is a good example of avoidable nesting calls. The bad implementation:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">func mapLine(msg *Message, in string, ch chan string) &#123;</div><div class="line">    if !startWith(in, stringComment) &#123;</div><div class="line">        token, value := parseLine(in)</div><div class="line">        if token != &quot;&quot; &#123;</div><div class="line">            f, contains := factory[string(token)]</div><div class="line">            if !contains &#123;</div><div class="line">                ch &lt;- &quot;ok&quot;</div><div class="line">            &#125; else &#123;</div><div class="line">                data := f(token, value)</div><div class="line">                enrichMessage(msg, data)</div><div class="line">                ch &lt;- &quot;ok&quot;</div><div class="line">            &#125;</div><div class="line">        &#125; else &#123;</div><div class="line">            ch &lt;- &quot;ok&quot;</div><div class="line">            return</div><div class="line">        &#125;</div><div class="line">    &#125; else &#123;</div><div class="line">        ch &lt;- &quot;ok&quot;</div><div class="line">        return</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>On the opposite, the good implementation is a flat representation:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">func mapLine(in []byte, ch chan interface&#123;&#125;) &#123;</div><div class="line">    // Filter empty lines and comment lines</div><div class="line">    if len(in) == 0 || startWith(in, bytesComment) &#123;</div><div class="line">        ch &lt;- nil</div><div class="line">        return</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    token, value := parseLine(in)</div><div class="line">    if token == nil &#123;</div><div class="line">        ch &lt;- nil</div><div class="line">        log.Warnf(&quot;Token name is empty on line %v&quot;, string(in))</div><div class="line">        return</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    sToken := string(token)</div><div class="line">    if f, contains := factory[sToken]; contains &#123;</div><div class="line">        ch &lt;- f(sToken, value)</div><div class="line">        return</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    log.Warnf(&quot;Token %v is not managed by the parser&quot;, string(in))</div><div class="line">    ch &lt;- nil</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>This makes the code easier to read in my opinion. Furthermore, this flat representation must also be applied to errors management. As an example:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">a, err := f1()</div><div class="line">if err == nil &#123;</div><div class="line">    b, err := f2()</div><div class="line">    if err == nil &#123;</div><div class="line">        return b, nil</div><div class="line">    &#125; else &#123;</div><div class="line">        return nil, err</div><div class="line">    &#125;</div><div class="line">&#125; else &#123;</div><div class="line">    return nil, err</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Should be replaced by:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">a, err := f1()</div><div class="line">if err != nil &#123;</div><div class="line">    return nil, err</div><div class="line">&#125;</div><div class="line">b, err := f2()</div><div class="line">if err != nil &#123;</div><div class="line">    return nil, err</div><div class="line">&#125;</div><div class="line">return b, nil</div></pre></td></tr></table></figure></p>
+<p>Once again, the second code version is easier to read.</p>
+<h1 id="Passing-data-by-reference-or-by-value"><a href="#Passing-data-by-reference-or-by-value" class="headerlink" title="Passing data by reference or by value"></a>Passing data by reference or by value</h1><p>The signature of the preprocessing function in the bad implementation is:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">func preprocess(in container) (container, error) &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Given the context of this project (performance does matter) and considering a message can potentially be quite heavy, a better option was to pass a pointer to the container structure instead. Otherwise, in the previous example the container value will be copied during each call.The good implementation does not face this problem as it deals with slices (a simple 24-byte structure regardless of the underlying data):<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">func preprocess(in []byte) ([][]byte, error) &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>More generally speaking, passing data either by reference or by value must not be an idiomatic choice.<br>Passing data by value could also help to make sure a function will not cause any side effect (like mutating the data passed in the function input). This has several benefits like unit testing or refactoring a code for parallelization for example (otherwise we need to check each subfunction to see if a mutation is made).<br>I do believe such choice must really be done carefully depending on the project context.</p>
+<h1 id="Parallelization"><a href="#Parallelization" class="headerlink" title="Parallelization"></a>Parallelization</h1><p>The bad implementation is based on a good initial idea: leveraging goroutines to parallelize the data processing (one goroutine per line).<br>This is achieved in the bad implementation by iterating over the number of lines and spawning a mapLine() call in a goroutine.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">for i := 0; i &lt; len(lines); i++ &#123;</div><div class="line">    go mapLine(&amp;msg, lines[i], ch)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>The mapLine() function takes in arguments three parameters:</p>
+<ul>
+<li>A pointer to the final Message structure to be returned. It means each mapLine() will enrich the same variable.</li>
+<li>The current line</li>
+<li>A channel used for sending a notification once the processing of the line is done</li>
+</ul>
+<p>Sending a pointer to a shared Message variable breaks one of the main Go principles:<br>Don’t communicate by sharing memory, share memory by communicating.<br>There are two main drawbacks to passing this shared variable:</p>
+<ul>
+<li>Drawback #1: Slices concurrent modifications</li>
+</ul>
+<p>Because the structure contains some slices which can be modified concurrently (by two or more goroutine at the same time), in the bad implementation we had to deal with mutexes.<br>For example, the Message structure contains a Estdata []estdata.<br>Modifying the slice by appending another estdata must be done this way:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">mutexEstdata.Lock()</div><div class="line">for _, v := range value &#123;</div><div class="line">    fl := extractFlightLevel(v[subtokenFl])</div><div class="line">    msg.Estdata = append(msg.Estdata, estdata&#123;v[subtokenPtid], v[subtokenEto], fl&#125;)</div><div class="line">&#125;</div><div class="line">mutexEstdata.Unlock()</div></pre></td></tr></table></figure></p>
+<p>Actually, except very specific use cases, having to use a mutex in a goroutine might be a code smell.</p>
+<ul>
+<li>Drawback #2: False sharing</li>
+</ul>
+<p>Sharing memory across threads/goroutines is not a good idea due to potential false sharing (a cache line in a given CPU core cache can be invalidated by another CPU core cache). This means we should avoid as much as possible sharing the same variable across threads/goroutines if they intend to mutate it.<br>In this very example, though, I don’t think false sharing has a huge impact as the input file is quite light (running a performance test with padding fields in the Message structure gives more or less the same result). Yet, that’s always something important to bear in mind in my opinion.<br>Let’s see now how is the good implementation dealing with the parallelization:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">for _, line := range in &#123;</div><div class="line">    go mapLine(line, ch)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Now, the mapLine() takes only two inputs:</p>
+<ul>
+<li>The current line</li>
+<li>A channel. This time this channel is not used to simply send a notification once a line processing is done but also to send the actual result. It means it is not up to the goroutines to modify the final Message structure.</li>
+</ul>
+<p>Gathering the results is done this way by the parent goroutine (the one spawning the mapLine() calls in separate goroutines):<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">msg := Message&#123;&#125;</div><div class="line"></div><div class="line">for range in &#123;</div><div class="line">    data := &lt;-ch</div><div class="line"></div><div class="line">    switch data.(type) &#123;</div><div class="line">        // Modify msg variable</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>This implementation is more aligned, in my opinion, with Go principles to share memory only by communicating. The Message variable is modified by a single goroutine to prevent potential concurrent slices modifications and false sharing.<br>One potential criticism even with the good code is to spawn a goroutine for each line. Such implementation will work because an ADEXP message will not contain thousands of lines. Yet, the simple implementation one request triggering one goroutine does not scale very much under very high throughput. A better option would have been to create a pool of reusable goroutines for example.<br><code>Edit</code>: This assumption (one line = one goroutine) was definitely not a good idea as it leads to way too much context switches. For additional information, please take a look at the link in the further reading chapter (at the end of the post).<br>Line processing notification<br>In the bad implementation, as described above, once a line processing is achieved by a mapLine() we should indicate it to the parent goroutine. This is done using a chan string channel and a call using:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ch &lt;- &quot;ok&quot;</div></pre></td></tr></table></figure></p>
+<p>As the parent does not actually check the value sent by the channel, a better option would have been to use chan struct{} with a ch &lt;- struct{}{} or even better (GC wise) to use a chan interface{} with a ch &lt;- nil.<br>Another approach (even cleaner in my opinion) would have been to use a sync.WaitGroup as the parent goroutine just need to continue its execution once every mapLine() is done.</p>
+<h1 id="If"><a href="#If" class="headerlink" title="If"></a>If</h1><p>The Go if statement allows passing a statement before the condition.<br>An improved version of:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">f, contains := factory[string(token)]</div><div class="line">if contains &#123;</div><div class="line">    // Do something</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Can be the following implementation:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if f, contains := factory[sToken]; contains &#123;</div><div class="line">    // Do something</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>It slightly improves the code readability.</p>
+<h1 id="Switch"><a href="#Switch" class="headerlink" title="Switch"></a>Switch</h1><p>Another mistake with the bad implementation is to forget the default case in the following switch:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">switch simpleToken.token &#123;</div><div class="line">case tokenTitle:</div><div class="line">    msg.Title = value</div><div class="line">case tokenAdep:</div><div class="line">    msg.Adep = value</div><div class="line">case tokenAltnz:</div><div class="line">    msg.Alternate = value </div><div class="line">// Other cases</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>The default can be optional if the developer thought about all the different cases. Yet, it is definitely better to catch this specific case like in the following example:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">switch simpleToken.token &#123;</div><div class="line">case tokenTitle:</div><div class="line">    msg.Title = value</div><div class="line">case tokenAdep:</div><div class="line">    msg.Adep = value</div><div class="line">case tokenAltnz:</div><div class="line">    msg.Alternate = value</div><div class="line">// Other cases    </div><div class="line">default:</div><div class="line">    log.Errorf(&quot;unexpected token type %v&quot;, simpleToken.token)</div><div class="line">    return Message&#123;&#125;, fmt.Errorf(&quot;unexpected token type %v&quot;, simpleToken.token)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Handling the default case would help in catching potential bugs made by developers as soon as possible in the development process.</p>
+<h1 id="Recursion"><a href="#Recursion" class="headerlink" title="Recursion"></a>Recursion</h1><p>The parseComplexLines() is a function to parse a complex token. The algorithm in the bad code is done using recursion:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">func parseComplexLines(in string, currentMap map[string]string, </div><div class="line">	out []map[string]string) []map[string]string &#123;</div><div class="line"></div><div class="line">    match := regexpSubfield.Find([]byte(in))</div><div class="line"></div><div class="line">    if match == nil &#123;</div><div class="line">        out = append(out, currentMap)</div><div class="line">        return out</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    sub := string(match)</div><div class="line"></div><div class="line">    h, l := parseLine(sub)</div><div class="line"></div><div class="line">    _, contains := currentMap[string(h)]</div><div class="line"></div><div class="line">    if contains &#123;</div><div class="line">        out = append(out, currentMap)</div><div class="line">        currentMap = make(map[string]string)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    currentMap[string(h)] = string(strings.Trim(l, stringEmpty))</div><div class="line"></div><div class="line">    return parseComplexLines(in[len(sub):], currentMap, out)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Yet, Go does not support tail-call elimination to optimize sub-function calls. The good code produces the exact same result but using an iterative algorithm:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">func parseComplexToken(token string, value []byte) interface&#123;&#125; &#123;</div><div class="line">    if value == nil &#123;</div><div class="line">        log.Warnf(&quot;Empty value&quot;)</div><div class="line">        return complexToken&#123;token, nil&#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    var v []map[string]string</div><div class="line">    currentMap := make(map[string]string)</div><div class="line"></div><div class="line">    matches := regexpSubfield.FindAll(value, -1)</div><div class="line"></div><div class="line">    for _, sub := range matches &#123;</div><div class="line">        h, l := parseLine(sub)</div><div class="line"></div><div class="line">        if _, contains := currentMap[string(h)]; contains &#123;</div><div class="line">            v = append(v, currentMap)</div><div class="line">            currentMap = make(map[string]string)</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        currentMap[string(h)] = string(bytes.Trim(l, stringEmpty))</div><div class="line">    &#125;</div><div class="line">    v = append(v, currentMap)</div><div class="line"></div><div class="line">    return complexToken&#123;token, v&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>The second code will be then more performant than the first one.</p>
+<h1 id="Constants-management"><a href="#Constants-management" class="headerlink" title="Constants management"></a>Constants management</h1><p>We must manage a constant value to dissociate ADEXP and ICAO messages. The bad code is doing it this way:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">const (</div><div class="line">    AdexpType = 0 // TODO constant</div><div class="line">    IcaoType  = 1</div><div class="line">)</div></pre></td></tr></table></figure></p>
+<p>Whereas the good code is a more elegant solution based on Go (elegant) iota:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">const (</div><div class="line">    AdexpType = iota</div><div class="line">    IcaoType </div><div class="line">)</div></pre></td></tr></table></figure></p>
+<p>It produces exactly the same result but it reduces potential developer mistakes.</p>
+<h1 id="Receiver-functions"><a href="#Receiver-functions" class="headerlink" title="Receiver functions"></a>Receiver functions</h1><p>Each parser provides a function to determine whether a message concerns the upper level (at least one route point above the level 350).<br>The bad code implements it this way:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">func IsUpperLevel(m Message) bool &#123;</div><div class="line">    for _, r := range m.RoutePoints &#123;</div><div class="line">        if r.FlightLevel &gt; upperLevel &#123;</div><div class="line">            return true</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return false</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Meaning we have to pass a Message as an input of the function.<br>Whereas the good code is simply a function with a Message receiver:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">func (m *Message) IsUpperLevel() bool &#123;</div><div class="line">    for _, r := range m.RoutePoints &#123;</div><div class="line">        if r.FlightLevel &gt; upperLevel &#123;</div><div class="line">            return true</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return false</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>The second approach is preferable. We simply indicate the Message struct implements a specific behavior.<br>It might also be a first step to using Go interfaces. For example, if someday we need to create another structure with the same behavior (IsUpperLevel()), the initial code does not even need to be refactored (as Message already implements this behavior).</p>
+<h1 id="Comments"><a href="#Comments" class="headerlink" title="Comments"></a>Comments</h1><p>This one is pretty obvious but the bad comment is poorly commented.<br>On the other side, I tried to comment the good code as I would do in a real project. Even though I’m not the kind of developer who likes to comment every single line, I still believe it is important to comment at least each function and the main steps in a complex function.<br>As an example:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">// Split each line in a goroutine</div><div class="line">for _, line := range in &#123;</div><div class="line">    go mapLine(line, ch)</div><div class="line">&#125;</div><div class="line"></div><div class="line">msg := Message&#123;&#125;</div><div class="line"></div><div class="line">// Gather the goroutine results</div><div class="line">for range in &#123;</div><div class="line">    // ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>One concrete example in addition of a function comment might also be very useful:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// Parse a line by returning the header (token name) and the value. </div><div class="line">// Example: -COMMENT TEST must returns COMMENT and TEST (in byte slices)</div><div class="line">func parseLine(in []byte) ([]byte, []byte) &#123;</div><div class="line">    // ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Such concrete examples can really help another developer in better understanding an existing project.<br>Last but not least, according to Go best practices the package itself is also commented.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">/*</div><div class="line">Package good is a library for parsing the ADEXP messages.</div><div class="line">An intermediate format Message is built by the parser.</div><div class="line">*/</div><div class="line"></div><div class="line">package good</div></pre></td></tr></table></figure></p>
+<h1 id="Logging"><a href="#Logging" class="headerlink" title="Logging"></a>Logging</h1><p>Another obvious example is the lack of logs produced in the bad code. As I’m not a fan of the standard log package, I used an external library called logrus in this project.</p>
+<h1 id="go-fmt"><a href="#go-fmt" class="headerlink" title="go fmt"></a>go fmt</h1><p>Go provides a set of powerful tools like go fmt. Unfortunately, we forgot to apply it to the bad code whereas it was done on the good code.</p>
+<h1 id="DDD"><a href="#DDD" class="headerlink" title="DDD"></a>DDD</h1><p>DDD brings the concept of ubiquitous language to emphasize the importance of a shared language between all the project stakeholders (business experts, dev, testers etc.).<br> This cannot be really measured here in this example, but keeping a simple structure like Message compliant with the language spoken inside of a bounded context is also a good point for the overall project maintainability.</p>
+<h1 id="Performance-results"><a href="#Performance-results" class="headerlink" title="Performance results"></a>Performance results</h1><p>On an i7–7700 4x 3.60Ghz, I ran a benchmark test to compare both parsers:</p>
+<ul>
+<li>Bad implementation: 60430 ns/op</li>
+<li>Good implementation: 45996 ns/op<br>The bad code is more than 30% slower than the good one.</li>
+</ul>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>It is pretty difficult in my opinion to give a general definition of what is a bad and a good code. A code in one context might be considered as good whereas in another context it might be considered as bad.<br>The first obvious characteristic of a good code is to provide a correct solution according to given functional requirements. A code can be performant if it does not fit the requirements, it is pretty useless.<br>Meanwhile, it is important for a developer to care about simple, maintainable and performant code.<br>The performance improvement does not materialize from the air, it comes with code complexity increase.<br>A good developer is someone able to find the right balance between these characteristics according to a given context.<br>Just like in DDD, context is key :)</p>
+<h1 id="Further-reading"><a href="#Further-reading" class="headerlink" title="Further reading"></a>Further reading</h1><p><a href="https://medium.com/@val_deleplace/go-code-refactoring-the-23x-performance-hunt-156746b522f7" target="_blank" rel="external">Go code refactoring: the 23x performance hunt</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Golang/" rel="tag"># Golang</a>
+          
+            <a href="/tags/Go/" rel="tag"># Go</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/11/软件架构/" rel="next" title="软件架构">
+                <i class="fa fa-chevron-left"></i> 软件架构
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="zhkui" />
+          <p class="site-author-name" itemprop="name">zhkui</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Context"><span class="nav-number">1.</span> <span class="nav-text">Context</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Parsing"><span class="nav-number">2.</span> <span class="nav-text">Parsing</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Step-by-step-comparison"><span class="nav-number">3.</span> <span class="nav-text">Step-by-step comparison</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#String-vs-byte"><span class="nav-number">4.</span> <span class="nav-text">String vs []byte</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Error-management"><span class="nav-number">5.</span> <span class="nav-text">Error management</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Avoid-nesting"><span class="nav-number">6.</span> <span class="nav-text">Avoid nesting</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Passing-data-by-reference-or-by-value"><span class="nav-number">7.</span> <span class="nav-text">Passing data by reference or by value</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Parallelization"><span class="nav-number">8.</span> <span class="nav-text">Parallelization</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#If"><span class="nav-number">9.</span> <span class="nav-text">If</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Switch"><span class="nav-number">10.</span> <span class="nav-text">Switch</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Recursion"><span class="nav-number">11.</span> <span class="nav-text">Recursion</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Constants-management"><span class="nav-number">12.</span> <span class="nav-text">Constants management</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Receiver-functions"><span class="nav-number">13.</span> <span class="nav-text">Receiver functions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Comments"><span class="nav-number">14.</span> <span class="nav-text">Comments</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Logging"><span class="nav-number">15.</span> <span class="nav-text">Logging</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#go-fmt"><span class="nav-number">16.</span> <span class="nav-text">go fmt</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DDD"><span class="nav-number">17.</span> <span class="nav-text">DDD</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Performance-results"><span class="nav-number">18.</span> <span class="nav-text">Performance results</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Conclusion"><span class="nav-number">19.</span> <span class="nav-text">Conclusion</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Further-reading"><span class="nav-number">20.</span> <span class="nav-text">Further reading</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2013 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-zhakui"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhkui</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
