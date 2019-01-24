@@ -97,7 +97,7 @@
 <meta property="og:url" content="http://zhkui.com/2018/03/11/软件架构/index.html">
 <meta property="og:site_name" content="ZhangKui&#x2F;Blog">
 <meta property="og:description" content="什么是软件架构要理解什么是软件架构，首先需要知道架构是什么，架构一词其实是来自英文单词Architecture，表示建筑，体系结构的意思。这里引用了其体系结构的意思，维基百科英文版里对 Architecture 的解释是：规划、设计和建造建筑物的过程及产物。在计算机软件领域，软件架构就成为了描述软件规划设计技术的专有名词。虽然我们对‘架构’做了解释。但是对于软件架构的概念定义并不那么简单，而且也没">
-<meta property="og:updated_time" content="2018-12-24T10:35:54.240Z">
+<meta property="og:updated_time" content="2019-01-11T10:36:13.341Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="软件架构">
 <meta name="twitter:description" content="什么是软件架构要理解什么是软件架构，首先需要知道架构是什么，架构一词其实是来自英文单词Architecture，表示建筑，体系结构的意思。这里引用了其体系结构的意思，维基百科英文版里对 Architecture 的解释是：规划、设计和建造建筑物的过程及产物。在计算机软件领域，软件架构就成为了描述软件规划设计技术的专有名词。虽然我们对‘架构’做了解释。但是对于软件架构的概念定义并不那么简单，而且也没">
@@ -374,6 +374,13 @@
 <li>关注架构实践中的主体–人，一人的决策为描述对象。</li>
 <li>归纳了架构决策的类型，指出架构决策不仅包括关于软件系统的组织、元素、子系统和架构风格等。还包括关于众多非功能需求的决策。</li>
 </ol>
+<h2 id="著名软件架构定义"><a href="#著名软件架构定义" class="headerlink" title="著名软件架构定义"></a>著名软件架构定义</h2><p>我们知道软架构没有一个统一的定义，且分为为组件派和决策派。这只是站在不同角度看问题的不同理解。下面我就列举几个著名的软件架构定义。从这些定义，我们也能看出提出者的思考方向，我们也可以结合这些定义和我们自己工作实践自己体会软件架构的意义。</p>
+<ol>
+<li>Booch、Rumbaugh和Jacobson对软件架构的定义：<br>架构是一系列重要决策的集合，这些决策与一下内容有关：软件的组织，构成系统的结构元素及其接口的选择，这些元素在相互协作中明确表现出的行为，这些结构元素和行为元素进一步组合所构成的更大更一抹的子系统，以及指导这一组织–包括这些元素及及其接口、他们的协作和他们的组合–架构风格。</li>
+<li>Garlan和Shaw的定义：<br>架构包括组件（Component）、连接件（Connector）和约束（Constrain）三大要素。组件可以是一组代码（例如：一个代码块、一个库、一个模块），也可以是独立的程序（例如：数据库程序，一个独立的子系统）。连接件可以是过程调用、管道和消息等，用于表示组件之间的相互关系。约束，一般为组件连接时的条件。</li>
+<li>Perry和Wolf的定义：<br>架构是一组具有特定形式的架构元素，这些元素分为三类：负责完成数据加工的处理元素（Processing Elements）、作为被加工的信息数据元素（Data Elements）及孕育吧架构不同部分组合在一起的连接元素（Connecting Elements）。</li>
+</ol>
+<h1 id="软件架构解析"><a href="#软件架构解析" class="headerlink" title="软件架构解析"></a>软件架构解析</h1><h2 id="软件架构关注分割与交互"><a href="#软件架构关注分割与交互" class="headerlink" title="软件架构关注分割与交互"></a>软件架构关注分割与交互</h2><p>软件设计其实就是一个分与合的过程。软件架构其实就是设计组件与组件之间的交互，同时也是一系列决策的结果。我们需要决定模块如何划分，每个模块的职责，模块接口如何定义，模块与模块采用何种交互机制(RPC,Massage..),开发技术选型，如何满足质量属性和约束的要求，如何适应变化，等等。</p>
 
       
     </div>
@@ -557,7 +564,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是软件架构"><span class="nav-number">1.</span> <span class="nav-text">什么是软件架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#组成派"><span class="nav-number">1.1.</span> <span class="nav-text">组成派</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#决策派"><span class="nav-number">1.2.</span> <span class="nav-text">决策派</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是软件架构"><span class="nav-number">1.</span> <span class="nav-text">什么是软件架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#组成派"><span class="nav-number">1.1.</span> <span class="nav-text">组成派</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#决策派"><span class="nav-number">1.2.</span> <span class="nav-text">决策派</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#著名软件架构定义"><span class="nav-number">1.3.</span> <span class="nav-text">著名软件架构定义</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#软件架构解析"><span class="nav-number">2.</span> <span class="nav-text">软件架构解析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#软件架构关注分割与交互"><span class="nav-number">2.1.</span> <span class="nav-text">软件架构关注分割与交互</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -580,7 +587,7 @@
         <div class="copyright" >
   
   &copy;  2013 - 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-zhakui"></i>
   </span>
