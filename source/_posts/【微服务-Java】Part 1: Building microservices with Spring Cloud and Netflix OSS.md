@@ -1,0 +1,28 @@
+---
+title: Part 1:Building microservices with Spring Cloud and Netflix OSS
+date: 2018-05-1 19:28:43
+categories:
+  【微服务-Java】
+tags: 
+  - Microservices
+  - Java
+  - Netflix
+  - Eureka
+  - Ribbon
+  - Zuul
+---
+在前面的文章中我们定义了一个`微服务应用操作模型`。现在我们将开始研究怎样使用Spring Cloud和Netflix OSS实现这个模型。通过实施这个模型，我们将覆盖最核心的部分：服务发现、动态路由、负载均衡、以及一些边缘服务。
+我们将使用Spring Cloud 和 Netflix OSS的一些核心组件，允许单独部署的微服务相互通信，无需手动管理。例如：跟踪每个微服务使用的端口或路由规则的手动配置。为避免端口冲突问题，我们的微服务在启动是将动态分配空闲端口从一个端口范围。为了允许对微服务的简单访问，我们将使用边缘服务器，它为微服务系统提供了一个众所周知的入口点。
+在简单介绍 Spring Cloud 和 Netflix OSS组件后，我们将展示一个我们将在整个博客系列中使用的系统架构。我们将介绍如何访问源代码并构建它。我们还将简要介绍并指出最重要部分的源代码。最后，我们通过运行一些关于如何访问服务的测试用例进行总结，并演示了如何简单地启动微服务的新实例并让负载均衡器开始使用它，同样无需任何手动配置。
+
+# 1 Spring Cloud 和 Netflix OSS
+Spring Cloud是Spring.io家族的一个想项目，它包含一组可以帮助我们实现我们的操作模型的组件。很大程度上Spring Cloud 1.0是基于Netflix OSS组件。Spring Cloud通过非常好的方法将Netflix组件集成到Spring环境中，使用类似于Spring Boot工作方式的自动配置和约定配置。
+下表是在微服务操作模型中通用组件和我们在博客中将要使用实际组件对照：
+![](./mapping-table.png)
+这篇文章讲覆盖Eureka、Ribbon和Zuul:
+- `Netflix Eureka` - 服务发现服务Netflix Eureka允许微服务在运行注册自己，因为他们出现在系统环境中。
+- `Netflix Ribbon` - 动态路由和负载均衡，服务消费者可以使用Netflix Ribbon在运行时查找服务。Ribbon使用Eureka中提供的信息来查找适当的服务实例。如果超过一个实例被发现，Ribbon将应用负载均衡在可用的实例上均衡请求。Ribbon不能作为一个独立的服务运行，它作为一个组件嵌入到每个服务消费这中。
+- `Netflix Zuul` - 边缘服务Zuul是我们对外界的看门人，不允许任何未被授权的外部请求通过。Zuul同时也提供一个众所周知的入口给系统环境中的微服务。使用动态分配端口可以方便的避免端口冲突并最大限度的减小管理，当然这对于一个给定的服务使用者更加困难了。Zuul使用Ribbon查找可用的服务并路由外部请求到一个适当的服务实例。本文我们将唯一使用Zuul提供入口，安全问题将在后面的文章介绍.
+注意：允许通过边缘服务器从外部访问的微服务可以看作是系统环境的API。
+
+2. 系统架构
