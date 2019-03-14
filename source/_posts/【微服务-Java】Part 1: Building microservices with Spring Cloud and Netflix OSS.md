@@ -40,8 +40,6 @@ Spring Cloud是Spring.io家族的一个想项目，它包含一组可以帮助�
 # 3 基于源码构建
 如果你想checke out源码并自己测试它，你需要安装Java SE 8和Git，然后执行：
 ```sh
-$ git clone https://github.com/callistaenterprise/blog-microservices.git
-$ cd blog-microservices
-$ git checkout -b B1 M1.1
+$ git clone https://github.com/zhakui/microservices-architecture.git
 ```
 

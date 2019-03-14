@@ -101,7 +101,8 @@
 <meta property="og:image" content="http://zhkui.com/2017/06/11/微服务操作模型/microservices-architecture.png">
 <meta property="og:image" content="http://zhkui.com/2017/06/11/微服务操作模型/microservices-1-2.png">
 <meta property="og:image" content="http://zhkui.com/2017/06/11/微服务操作模型/microservices-1-1.png">
-<meta property="og:updated_time" content="2019-03-04T12:10:37.261Z">
+<meta property="og:image" content="http://zhkui.com/2017/06/11/微服务操作模型/microservices-operations-reference-model.png">
+<meta property="og:updated_time" content="2019-03-05T02:38:59.314Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="微服务操作模型">
 <meta name="twitter:description" content="这里不仅仅是再次重复介绍一次微服务，有关微服务的介绍可以参考Fowler - Microservices.相反，这篇文章是基于我们已经开始使用微服务来分解我们的应用程序以期提高我们的应用的可部署下和可伸缩性。当在系统环境中部署的微服务数量增加，单体式应用程序部署减少时，将遇到新的挑战，本文将重点关注这些新的挑战，并为使用大量微服务部署的系统环境定义操作模型。 本文将分为下面几个部分：  前提条件">
@@ -372,9 +373,9 @@
 </ul>
 <h2 id="1-1-目标架构"><a href="#1-1-目标架构" class="headerlink" title="1.1 目标架构"></a>1.1 目标架构</h2><p>首先，我们需要思考，我们如何划分所有微服务。例如我们可以在某些层中垂直划分我们的微服务：</p>
 <ul>
-<li>‘核心服务’：处理业务数据的持久性并应用业务规则和其他逻辑</li>
-<li>‘组合服务’：组合服务可以协调许多核心服务以执行常见任务或聚合来自多个核心服务的信息。</li>
-<li>‘API服务’：暴露允许外部使用的功能，例如：在系统环境中使用的第三方提供的基础功能。</li>
+<li><code>核心服务</code>：处理业务数据的持久性并应用业务规则和其他逻辑</li>
+<li><code>组合服务</code>：组合服务可以协调许多核心服务以执行常见任务或聚合来自多个核心服务的信息。</li>
+<li><code>API服务</code>：暴露允许外部使用的功能，例如：在系统环境中使用的第三方提供的基础功能。</li>
 </ul>
 <p>…横向，我们可以通过定义不同的域，然后根据不同的域进行分区。可形成类似下面的目标架构。<br><img src="./microservices-architecture.png" alt=""><br>Note：这只是一个示例目标架构，您的架构可以完全不同。 这里的关键是，在开始扩展部署微服务之前，需要建立目标体系结构。 否则，您可能最终会进入一个看起来像一大碗意大利面条的系统环境（混乱不堪），其特性甚至比现有的单片应用程序更差。</p>
 <h2 id="1-2-持续的交付"><a href="#1-2-持续的交付" class="headerlink" title="1.2 持续的交付"></a>1.2 持续的交付</h2><p>我们还假设我们拥有某种连续交付工具链，以便我们能够以有效的可重复和质量驱动的方式推出我们的微服务，例如：<br><img src="./microservices-1-2.png" alt=""><br>Source:（<a href="http://www.infoq.com/minibooks/emag-devops-toolchain" target="_blank" rel="external">http://www.infoq.com/minibooks/emag-devops-toolchain</a>)</p>
@@ -387,32 +388,46 @@
 <blockquote>
 <p>当我们开始拆分一些单片应用程序并用大量微服务替换它们时，系统环境会发生什么？</p>
 <ol>
-<li>‘大量的部署单元’,许多小型微服务而不是几个大型的单片应用程序，这将导致需要管理和跟踪的部署单元数量显著增加。</li>
-<li>‘微服务同时是服务提供者和服务消费者’，这将导致系统环境中大多数微服务相互连接，服务调用关系更加复杂。</li>
-<li>‘一些微服务将暴露外部API’，这些微服务将负责屏蔽其他微服务免受外部访问</li>
-<li>‘系统环境将更加动态’，新的微服务被部署，旧的微服务被替换或移除，已有的微服务的新实例被启动以满足不断增加的负载。 这意味着服务将以前所未有的频率更替（新增，移除、替换、追加实例）。</li>
-<li>‘MTBF（平均故障间隔时间）将减少’,例如:故障将在系统环境中更频繁地发生,软件组件会不时出现故障。与仅具有少量大型单片应用程序的系统环境相比，大量小型部署单元的系统环境，系统环境中的某些部件（即使很小）发生故障的可能性将会增加。</li>
+<li><code>大量的部署单元</code>,许多小型微服务而不是几个大型的单片应用程序，这将导致需要管理和跟踪的部署单元数量显著增加。</li>
+<li><code>微服务同时是服务提供者和服务消费者</code>，这将导致系统环境中大多数微服务相互连接，服务调用关系更加复杂。</li>
+<li><code>一些微服务将暴露外部API</code>，这些微服务将负责屏蔽其他微服务免受外部访问</li>
+<li><code>系统环境将更加动态</code>，新的微服务被部署，旧的微服务被替换或移除，已有的微服务的新实例被启动以满足不断增加的负载。 这意味着服务将以前所未有的频率更替（新增，移除、替换、追加实例）。</li>
+<li><code>MTBF（平均故障间隔时间）将减少</code>,例如:故障将在系统环境中更频繁地发生,软件组件会不时出现故障。与仅具有少量大型单片应用程序的系统环境相比，大量小型部署单元的系统环境，系统环境中的某些部件（即使很小）发生故障的可能性将会增加。</li>
 </ol>
 </blockquote>
 <h1 id="3-问题"><a href="#3-问题" class="headerlink" title="3 问题"></a>3 问题</h1><p>这将在某些情况下会出现导致一些重要的与运行时相关的新问题：</p>
 <ol>
-<li>‘如何配置我的微服务并且它是否正确？’,处理配置不是少数应用程序的主要问题，例如 每个应用程序将自己的配置存储在磁盘上的属性文件或其自己的数据库中的配置表中。由于在多个服务器上的多个实例中部署了大量微服务，因此管理这种方法变得更加棘手。 这会导致很多小的配置文件/表遍布整个系统环境，很难以高效的方式保持良好的质量。</li>
-<li>‘需要部署那些微服务，部署到哪里？’保持对少量应用程序主机和端口服务所显示的内容跟踪很简单，因为数量少且变化率低。由于大量的微服务彼此独立地部署，因此系统环境中会有或多或少的连续变化，如果手动处理，这很容易导致维护噩梦。</li>
-<li>‘如果更新路由信息？‘在动态系统环境中成为服务的消费者也可能具有挑战性。 特别是如果需要手动更新路由表（例如反向代理或消费者配置文件）。</li>
-<li>‘如何防止连锁异常？’由于微服务将彼此互连，因此需要特别注意以避免系统环境中出现连锁的故障链。例如。 如果一些微服务依赖到一个运行失败的微服务，依赖的微服务也可能会失败等等。 如果处理不当，系统环境的大部分服务可能会受到单点故障微服务的影响，从而导致系统环境变得脆弱。</li>
-<li>‘如何验证所有服务是否已启动并正在运行？’跟踪少量的应用程序的状态相当容易，但我们如何验证所有微服务是否健康并准备好接收请求？</li>
-<li>‘如何跟踪服务之间的消息流动？’如果支持组织开始收到有关某些处理失败的投诉怎么办？那个微服务是发生问题的根本原因呢？如何找出发生问题的处理呢？例如：订单号12345因为微服务A无法访问或需要在微服务B发送有关该订单的确认消息之前需要手动批准而被卡住了？</li>
-<li>‘如何确保只有API服务被外部公开？’例如，如何避免未经授权的外部请求访问内部服务。</li>
-<li>‘如何保护API服务？’不是新的也不是微服务特有的问题，但对于保护实际暴露在外部的微服务仍然非常重要。</li>
+<li><code>如何配置我的微服务并且它是否正确？</code>处理配置不是少数应用程序的主要问题，例如 每个应用程序将自己的配置存储在磁盘上的属性文件或其自己的数据库中的配置表中。由于在多个服务器上的多个实例中部署了大量微服务，因此管理这种方法变得更加棘手。 这会导致很多小的配置文件/表遍布整个系统环境，很难以高效的方式保持良好的质量。</li>
+<li><code>需要部署那些微服务，部署到哪里？</code>保持对少量应用程序主机和端口服务所显示的内容跟踪很简单，因为数量少且变化率低。由于大量的微服务彼此独立地部署，因此系统环境中会有或多或少的连续变化，如果手动处理，这很容易导致维护噩梦。</li>
+<li><code>如果更新路由信息？</code>在动态系统环境中成为服务的消费者也可能具有挑战性。 特别是如果需要手动更新路由表（例如反向代理或消费者配置文件）。</li>
+<li><code>如何防止连锁异常？</code>由于微服务将彼此互连，因此需要特别注意以避免系统环境中出现连锁的故障链。例如。 如果一些微服务依赖到一个运行失败的微服务，依赖的微服务也可能会失败等等。 如果处理不当，系统环境的大部分服务可能会受到单点故障微服务的影响，从而导致系统环境变得脆弱。</li>
+<li><code>如何验证所有服务是否已启动并正在运行？</code>跟踪少量的应用程序的状态相当容易，但我们如何验证所有微服务是否健康并准备好接收请求？</li>
+<li><code>如何跟踪服务之间的消息流动？</code>如果支持组织开始收到有关某些处理失败的投诉怎么办？那个微服务是发生问题的根本原因呢？如何找出发生问题的处理呢？例如：订单号12345因为微服务A无法访问或需要在微服务B发送有关该订单的确认消息之前需要手动批准而被卡住了？</li>
+<li><code>如何确保只有API服务被外部公开？</code>例如，如何避免未经授权的外部请求访问内部服务。</li>
+<li><code>如何保护API服务？</code>不是新的也不是微服务特有的问题，但对于保护实际暴露在外部的微服务仍然非常重要。</li>
 </ol>
 <h1 id="4-必须的组件"><a href="#4-必须的组件" class="headerlink" title="4 必须的组件"></a>4 必须的组件</h1><p>为了解决上面的问题，我们需要一下新的操作和管理方法，但是，并不是每个系统都需要这些，比如在一下仅仅运行少量应用的系统环境中，可以选用需要的功能。针对上面提出的问题的解决方案包括下面组件：</p>
 <ol>
-<li>‘中心配置服务’，我们需要集中管理配置的中心配置服务，以替代部署单个本地配置（每个服务一个配置）。我们也需要一个用于微服务取得配置信息的配置API接口。</li>
-<li>‘服务发现服务’， 我们需要一个服务发现功能，使用服务发现服务替代手工跟踪部署了的微服务当前的主机、端口。通过一个API，微服务可以再启动时自己注册微服务。</li>
-<li>‘动态路由和负载均衡’， 动态路由和负载均衡器提供服务发现功能。路由组件可以使用服务发现API查找需要请求的被发布的服务，负载均衡组件可决定那个实例会被用于请求，如果有多个实例被发布用于服务请求。</li>
-<li>‘熔断器’,断路器为了避免故障链问题，我们需要应用断路器模式，有关详细信息，请参阅“<a href="https://pragprog.com/book/mnee/release-it" target="_blank" rel="external">Release It</a>”一书！ 或者阅读博文<a href="http://martinfowler.com/bliki/CircuitBreaker.html" target="_blank" rel="external">Fowler  -  Circuit Breaker</a>。</li>
-<li></li>
+<li><code>中心配置服务</code>，我们需要集中管理配置的中心配置服务，以替代部署单个本地配置（每个服务一个配置）。我们也需要一个用于微服务取得配置信息的配置API接口。</li>
+<li><code>服务发现服务</code>， 我们需要一个服务发现功能，使用服务发现服务替代手工跟踪部署了的微服务当前的主机、端口。通过一个API，微服务可以再启动时自己注册微服务。</li>
+<li><code>动态路由和负载均衡</code>， 动态路由和负载均衡器提供服务发现功能。路由组件可以使用服务发现API查找需要请求的被发布的服务，负载均衡组件可决定那个实例会被用于请求，如果有多个实例被发布用于服务请求。</li>
+<li><code>熔断器</code>,断路器为了避免故障链问题，我们需要应用断路器模式，有关详细信息，请参阅“<a href="https://pragprog.com/book/mnee/release-it" target="_blank" rel="external">Release It</a>”一书！ 或者阅读博文<a href="http://martinfowler.com/bliki/CircuitBreaker.html" target="_blank" rel="external">Fowler  -  Circuit Breaker</a>。</li>
+<li><code>监控</code>，我们已经安装了熔断器，我们可以监控其状态，并收集运行时统计信息，以获取系统的健康状况及其使用状况的图片。这些信息可以收集并展示在仪表盘，可以设置可配置阈值的自动警报。</li>
+<li><code>集中日志分析</code>，集中日志分析能够跟踪消息和检测他们核实被卡住，我们需要能够链接到每个服务器并收集每个微服务产品的日志的集中日志分析功能。日志分析功能把这些日志存储到集中的数据库中并提供搜索和仪表盘功能。注意：为了能够找到相关消息，所有微服务在日志消息中使用关联的id是非常重要的。</li>
+<li><code>边缘服务</code>，边缘服务用于在外部暴露API服务并防止未授权访问到内部服务，我们需要所有的外部流量都要通过的边缘服务。边缘服务可以基于上述服务发现组件重用代理路由和负载均衡功能。边缘服务器将充当动态和活动的反向代理，无论何时更改内部系统，都无需手动更新。</li>
+<li><code>OAuth 2.0保护受保护的API</code>，为了保护公开的API服务，建议使用OAuth 2.0标准。 OAuth 2.0应用建议的解决方案：</li>
 </ol>
+<ul>
+<li>可用作OAuth授权服务器的新组件</li>
+<li>API服务将充当OAuth资源服务</li>
+<li>外部API消费者将充当OAuth的客户端</li>
+<li>边缘服务将充当OAuth Token中继,意思是：<ul>
+<li>它将充当OAuth资源服务器</li>
+<li>它将通过外部请求中的OAuth访问令牌传递给API服务<br>注意：随着时间的推移，OAuth 2.0标准很可能会与OpenID Connect标准相辅相成，以提供改进的授权功能.</li>
+</ul>
+</li>
+</ul>
+<h1 id="5-参考模型"><a href="#5-参考模型" class="headerlink" title="5 参考模型"></a>5 参考模型</h1><p>总之，这意味着微服务需要具有如上所述的许多支持服务的基础设施，微服务使用它们的API进行交互。 这可以通过以下图片看到：<br><img src="./microservices-operations-reference-model.png" alt=""><br>注意：为了降低图片中的复杂性，微服务和支持服务之间的交互不可视化。</p>
 
       
     </div>
@@ -465,8 +480,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/06/11/Docker常用命令/" rel="prev" title="Docker常用命令">
-                Docker常用命令 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/06/11/Docker安装/" rel="prev" title="Docker安装">
+                Docker安装 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -539,7 +554,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">19</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -550,7 +565,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -561,7 +576,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -596,7 +611,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-前提条件"><span class="nav-number">1.</span> <span class="nav-text">1 前提条件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-目标架构"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 目标架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-持续的交付"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 持续的交付</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-组织"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 组织</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-扩大"><span class="nav-number">2.</span> <span class="nav-text">2 扩大</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-问题"><span class="nav-number">3.</span> <span class="nav-text">3 问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-必须的组件"><span class="nav-number">4.</span> <span class="nav-text">4 必须的组件</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-前提条件"><span class="nav-number">1.</span> <span class="nav-text">1 前提条件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-目标架构"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 目标架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-持续的交付"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 持续的交付</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-组织"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 组织</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-扩大"><span class="nav-number">2.</span> <span class="nav-text">2 扩大</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-问题"><span class="nav-number">3.</span> <span class="nav-text">3 问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-必须的组件"><span class="nav-number">4.</span> <span class="nav-text">4 必须的组件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-参考模型"><span class="nav-number">5.</span> <span class="nav-text">5 参考模型</span></a></li></ol></div>
             
 
           </div>
