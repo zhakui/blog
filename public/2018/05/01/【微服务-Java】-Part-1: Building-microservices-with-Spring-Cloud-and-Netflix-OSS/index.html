@@ -94,16 +94,16 @@
 <meta name="keywords" content="Microservices,Java,Netflix,Eureka,Ribbon,Zuul">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Part 1:Building microservices with Spring Cloud and Netflix OSS">
-<meta property="og:url" content="http://zhkui.com/2018/05/01/【微服务-Java】Part 1: Building microservices with Spring Cloud and Netflix OSS/index.html">
+<meta property="og:url" content="http://zhkui.com/2018/05/01/【微服务-Java】-Part-1: Building-microservices-with-Spring-Cloud-and-Netflix-OSS/index.html">
 <meta property="og:site_name" content="ZhangKui&#x2F;Blog">
 <meta property="og:description" content="在前面的文章中我们定义了一个微服务应用操作模型。现在我们将开始研究怎样使用Spring Cloud和Netflix OSS实现这个模型。通过实施这个模型，我们将覆盖最核心的部分：服务发现、动态路由、负载均衡、以及一些边缘服务。我们将使用Spring Cloud 和 Netflix OSS的一些核心组件，允许单独部署的微服务相互通信，无需手动管理。例如：跟踪每个微服务使用的端口或路由规则的手动配置。">
-<meta property="og:image" content="http://zhkui.com/2018/05/01/【微服务-Java】Part%201:%20Building%20microservices%20with%20Spring%20Cloud%20and%20Netflix%20OSS/mapping-table.png">
-<meta property="og:image" content="http://zhkui.com/2018/05/01/【微服务-Java】Part%201:%20Building%20microservices%20with%20Spring%20Cloud%20and%20Netflix%20OSS/system-landscape.png">
-<meta property="og:updated_time" content="2019-03-06T11:17:11.127Z">
+<meta property="og:image" content="http://zhkui.com/2018/05/01/【微服务-Java】-Part-1:%20Building-microservices-with-Spring-Cloud-and-Netflix-OSS/mapping-table.png">
+<meta property="og:image" content="http://zhkui.com/2018/05/01/【微服务-Java】-Part-1:%20Building-microservices-with-Spring-Cloud-and-Netflix-OSS/system-landscape.png">
+<meta property="og:updated_time" content="2019-03-14T11:10:01.870Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Part 1:Building microservices with Spring Cloud and Netflix OSS">
 <meta name="twitter:description" content="在前面的文章中我们定义了一个微服务应用操作模型。现在我们将开始研究怎样使用Spring Cloud和Netflix OSS实现这个模型。通过实施这个模型，我们将覆盖最核心的部分：服务发现、动态路由、负载均衡、以及一些边缘服务。我们将使用Spring Cloud 和 Netflix OSS的一些核心组件，允许单独部署的微服务相互通信，无需手动管理。例如：跟踪每个微服务使用的端口或路由规则的手动配置。">
-<meta name="twitter:image" content="http://zhkui.com/2018/05/01/【微服务-Java】Part%201:%20Building%20microservices%20with%20Spring%20Cloud%20and%20Netflix%20OSS/mapping-table.png">
+<meta name="twitter:image" content="http://zhkui.com/2018/05/01/【微服务-Java】-Part-1:%20Building-microservices-with-Spring-Cloud-and-Netflix-OSS/mapping-table.png">
 
 
 
@@ -131,7 +131,7 @@
 
 
 
-  <link rel="canonical" href="http://zhkui.com/2018/05/01/【微服务-Java】Part 1: Building microservices with Spring Cloud and Netflix OSS/"/>
+  <link rel="canonical" href="http://zhkui.com/2018/05/01/【微服务-Java】-Part-1: Building-microservices-with-Spring-Cloud-and-Netflix-OSS/"/>
 
 
 
@@ -267,7 +267,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://zhkui.com/2018/05/01/【微服务-Java】Part 1: Building microservices with Spring Cloud and Netflix OSS/">
+    <link itemprop="mainEntityOfPage" href="http://zhkui.com/2018/05/01/【微服务-Java】-Part-1: Building-microservices-with-Spring-Cloud-and-Netflix-OSS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zhkui">
@@ -373,6 +373,7 @@
 </blockquote>
 </li>
 </ul>
+<h1 id="3-基于源码构建"><a href="#3-基于源码构建" class="headerlink" title="3 基于源码构建"></a>3 基于源码构建</h1><p>如果你想checke out源码并自己测试它，你需要安装Java SE 8和Git，然后执行：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git <span class="built_in">clone</span> https://github.com/zhakui/microservices-architecture.git</div></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -566,7 +567,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Spring-Cloud-和-Netflix-OSS"><span class="nav-number">1.</span> <span class="nav-text">1 Spring Cloud 和 Netflix OSS</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Spring-Cloud-和-Netflix-OSS"><span class="nav-number">1.</span> <span class="nav-text">1 Spring Cloud 和 Netflix OSS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-基于源码构建"><span class="nav-number">2.</span> <span class="nav-text">3 基于源码构建</span></a></li></ol></div>
             
 
           </div>
