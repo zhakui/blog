@@ -99,7 +99,8 @@
 <meta property="og:description" content="在前面的文章中我们定义了一个微服务应用操作模型。现在我们将开始研究怎样使用Spring Cloud和Netflix OSS实现这个模型。通过实施这个模型，我们将覆盖最核心的部分：服务发现、动态路由、负载均衡、以及一些边缘服务。我们将使用Spring Cloud 和 Netflix OSS的一些核心组件，允许单独部署的微服务相互通信，无需手动管理。例如：跟踪每个微服务使用的端口或路由规则的手动配置。">
 <meta property="og:image" content="http://zhkui.com/2018/05/01/【微服务-Java】-Part-1:%20Building-microservices-with-Spring-Cloud-and-Netflix-OSS/mapping-table.png">
 <meta property="og:image" content="http://zhkui.com/2018/05/01/【微服务-Java】-Part-1:%20Building-microservices-with-Spring-Cloud-and-Netflix-OSS/system-landscape.png">
-<meta property="og:updated_time" content="2019-03-14T11:10:01.870Z">
+<meta property="og:image" content="http://zhkui.com/2018/05/01/【微服务-Java】-Part-1:%20Building-microservices-with-Spring-Cloud-and-Netflix-OSS/structure.png">
+<meta property="og:updated_time" content="2019-05-06T03:54:48.360Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Part 1:Building microservices with Spring Cloud and Netflix OSS">
 <meta name="twitter:description" content="在前面的文章中我们定义了一个微服务应用操作模型。现在我们将开始研究怎样使用Spring Cloud和Netflix OSS实现这个模型。通过实施这个模型，我们将覆盖最核心的部分：服务发现、动态路由、负载均衡、以及一些边缘服务。我们将使用Spring Cloud 和 Netflix OSS的一些核心组件，允许单独部署的微服务相互通信，无需手动管理。例如：跟踪每个微服务使用的端口或路由规则的手动配置。">
@@ -360,9 +361,7 @@
 <li><code>Netflix Ribbon</code> - 动态路由和负载均衡，服务消费者可以使用Netflix Ribbon在运行时查找服务。Ribbon使用Eureka中提供的信息来查找适当的服务实例。如果超过一个实例被发现，Ribbon将应用负载均衡在可用的实例上均衡请求。Ribbon不能作为一个独立的服务运行，它作为一个组件嵌入到每个服务消费这中。</li>
 <li><code>Netflix Zuul</code> - 边缘服务Zuul是我们对外界的看门人，不允许任何未被授权的外部请求通过。Zuul同时也提供一个众所周知的入口给系统环境中的微服务。使用动态分配端口可以方便的避免端口冲突并最大限度的减小管理，当然这对于一个给定的服务使用者更加困难了。Zuul使用Ribbon查找可用的服务并路由外部请求到一个适当的服务实例。本文我们将唯一使用Zuul提供入口，安全问题将在后面的文章介绍.<br>注意：允许通过边缘服务器从外部访问的微服务可以看作是系统环境的API。</li>
 </ul>
-<ol>
-<li>系统架构<br>为了能够测试组件，我们需要一个系统架构来进行测试。 对于本文的范围，我们开发了一个类似于以下内容的架构：<br><img src="./system-landscape.png" alt=""><br>它包含四个业务服务（绿色框）：</li>
-</ol>
+<h1 id="2-系统架构"><a href="#2-系统架构" class="headerlink" title="2. 系统架构"></a>2. 系统架构</h1><p>为了能够测试组件，我们需要一个系统架构来进行测试。 对于本文的范围，我们开发了一个类似于以下内容的架构：<br><img src="./system-landscape.png" alt=""><br>它包含四个业务服务（绿色框）：</p>
 <ul>
 <li>三个核心服务，分布负责处理产品相关信息、推荐、评论。</li>
 <li>一种复合服务，即product-composite，可以汇总来自三种核心服务的信息，并构成产品信息视图以及产品的评论和建议。<br>为了支撑业务服务，我们使用下面基础服务和组件（蓝色框）：</li>
@@ -373,7 +372,18 @@
 </blockquote>
 </li>
 </ul>
-<h1 id="3-基于源码构建"><a href="#3-基于源码构建" class="headerlink" title="3 基于源码构建"></a>3 基于源码构建</h1><p>如果你想checke out源码并自己测试它，你需要安装Java SE 8和Git，然后执行：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git <span class="built_in">clone</span> https://github.com/zhakui/microservices-architecture.git</div></pre></td></tr></table></figure></p>
+<h1 id="3-基于源码构建"><a href="#3-基于源码构建" class="headerlink" title="3. 基于源码构建"></a>3. 基于源码构建</h1><p>如果你想checke out源码并自己测试它，你需要安装Java SE 8和Git，然后执行：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git <span class="built_in">clone</span> https://github.com/zhakui/microservices-architecture.git</div></pre></td></tr></table></figure></p>
+<p>下面是组建结构的结果：<br><img src="./structure.png" alt=""><br>每个组件都是单独构建的（请记住，我们不再构建单一的应用程序:-)所以每个组件都有自己的构建文件。我们使用Maven作为构建系统，如果您没有安装Maven，构建文件将为您下载。 为了简化流程，我们有一个可用于构建组件的小shell脚本。<br>···sh<br>./build-all.sh<br>···</p>
+<blockquote>
+<p>如果你使用的是Windows，你可以执行相应的bat文件，build-all.bat!</p>
+</blockquote>
+<h1 id="4-源码梳理"><a href="#4-源码梳理" class="headerlink" title="4. 源码梳理"></a>4. 源码梳理</h1><p>让我们快速浏览一些关键的源代码构造。 每个微服务都是作为独立的Spring Boot应用程序开发的，并使用Undertow（一个轻量级的Servlet 3.1容器）作为其Web服务器。 Spring MVC用于实现基于REST的服务，Spring RestTemplate用于执行传出调用。 如果您想了解有关这些核心技术的更多信息，可以查看以下文章。<br>相反，让我们专注于如何在Spring Cloud和Netflix OSS中使用该功能！<br>注意：我们有意使实现尽可能简单，使源代码易于掌握和理解。</p>
+<h2 id="4-1-分级依赖"><a href="#4-1-分级依赖" class="headerlink" title="4.1 分级依赖"></a>4.1 分级依赖</h2><p>本着Spring Boot的精神，Spring Cloud定义了一组入门依赖项，这使得很容易引入特定功能所需的依赖项。 要在微服务中使用Eureka和Ribbon来注册和/或调用其他服务，只需将以下内容添加到构建文件中：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"> &lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-cloud-starter-eureka&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;1.4.6.RELEASE&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure></p>
+<p>完整的是实例请可参考：product-service/pom.xml<br>为了能够设置Eureka服务器，请添加以下依赖项：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;spring-cloud-starter-eureka-server&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;1.4.6.RELEASE&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure></p>
+<p>完整的是实例请可参考：discovery-server/pom.xml</p>
+<h2 id="4-2-基础设施服务"><a href="#4-2-基础设施服务" class="headerlink" title="4.2 基础设施服务"></a>4.2 基础设施服务</h2><p>基于Spring Cloud和Netflix OSS设置基础架构服务器非常简单。 例如。 对于Eureka服务器，将注释@EnableEurekaServer添加到标准的Spring Boot应用程序：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@SpringBootApplication</span></div><div class="line"><span class="meta">@EnableEurekaServer</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EurekaApplication</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        SpringApplication.run(EurekaApplication.class, args);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>完整代码见：EurekaApplication.java<br>建立一个Zuul服务，你需要添加一个@EnableZuulProxy注解，例如：ZuulApplication.java.<br>通过这些简单的注释，您可以获得启动的默认服务器配置。 需要时，可以使用特定设置覆盖默认配置。 覆盖默认配置的一个示例是我们限制边缘服务器允许将呼叫路由到哪些服务。 默认情况下，Zuul为其在Eureka中可以找到的每项服务设置了一条路线。 通过application.yml文件中的以下配置，我们将路由限制为仅允许调用复合产品服务：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">zuul:</div><div class="line">  ignoredServices: <span class="string">"*"</span></div><div class="line">  routes:</div><div class="line">    productcomposite:</div><div class="line">      path: /productcomposite<span class="comment">/**</span></div></pre></td></tr></table></figure></p>
+<p>完整实例见： edge-server/application.yml.</p>
 
       
     </div>
@@ -436,8 +446,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/16/Good-Code-vs-Bad-Code-in-Golang/" rel="prev" title="Good Code vs Bad Code in Golang">
-                Good Code vs Bad Code in Golang <i class="fa fa-chevron-right"></i>
+              <a href="/2018/05/01/【微服务-Java-Part-1 Building-microservices-with-Spring-Cloud-and-Netflix-OSS/" rel="prev" title="【微服务-Java】 Part 1:Building microservices with Spring Cloud and Netflix OSS">
+                【微服务-Java】 Part 1:Building microservices with Spring Cloud and Netflix OSS <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -510,7 +520,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -567,7 +577,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Spring-Cloud-和-Netflix-OSS"><span class="nav-number">1.</span> <span class="nav-text">1 Spring Cloud 和 Netflix OSS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-基于源码构建"><span class="nav-number">2.</span> <span class="nav-text">3 基于源码构建</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Spring-Cloud-和-Netflix-OSS"><span class="nav-number">1.</span> <span class="nav-text">1 Spring Cloud 和 Netflix OSS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-系统架构"><span class="nav-number">2.</span> <span class="nav-text">2. 系统架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-基于源码构建"><span class="nav-number">3.</span> <span class="nav-text">3. 基于源码构建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-源码梳理"><span class="nav-number">4.</span> <span class="nav-text">4. 源码梳理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-分级依赖"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 分级依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-基础设施服务"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 基础设施服务</span></a></li></ol></li></ol></div>
             
 
           </div>
